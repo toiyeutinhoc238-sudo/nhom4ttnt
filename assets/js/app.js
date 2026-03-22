@@ -10,6 +10,9 @@ const state = {
     currentSubject: null,
     currentChapter: null,
     currentCategory: null,
+    activeTool: null,
+    matrixA: { rows: 3, cols: 3 },
+    matrixB: { rows: 3, cols: 3 },
     searchQuery: "",
     isMobile: window.innerWidth < 992,
     currentResults: [],
@@ -299,9 +302,14 @@ window.loadMoreTopics = function() {
 
 // Master Filter Pipeline
 function applyFiltersAndSearch() {
-    let results = state.data.topics;
+    let results = [...state.data.topics];
 
-    // 1. Search
+    if (state.activeTool) {
+        renderMathTools(state.activeTool);
+        return;
+    }
+
+    // 1. Search Filter
     if (state.searchQuery.trim() !== '') {
         const searchResults = state.fuse.search(state.searchQuery);
         results = searchResults.map(res => res.item);
@@ -350,16 +358,77 @@ function updateBreadcrumb() {
     }
 }
 
-// Expose clear function to global scope for HTML inline calls
+// Clear Filters
 window.clearFilters = function() {
     state.currentSubject = null;
     state.currentChapter = null;
     state.currentCategory = null;
+    state.activeTool = null;
     state.searchQuery = "";
     elements.searchInput.value = "";
     elements.clearSearchBtn.classList.add('d-none');
     applyFiltersAndSearch();
 };
+
+/** 
+ * PROFESSIONAL MATH TOOLS IMPLEMENTATION
+ */
+function renderMathTools(toolId) {
+    // IDEMPOTENCY: Don't re-render if we are already viewing this tool.
+    const existingTool = elements.contentArea.querySelector('.tool-container');
+    if (existingTool && existingTool.getAttribute('data-tool-id') === 'external-tools') return;
+
+    elements.contentArea.innerHTML = '';
+    const container = document.createElement('div');
+    container.className = 'tool-container fade-in position-relative';
+    container.setAttribute('data-tool-id', 'external-tools');
+    
+    container.innerHTML = `
+        <div class="tool-badge">Professional Suite</div>
+        <div class="tool-header">
+            <h3 class="m-0"><i class="bi bi-cpu me-2"></i>Bộ công cụ Toán học Chuyên nghiệp</h3>
+            <p class="text-muted mt-2">Truy cập các bộ giải toán mạnh mẽ nhất thế giới để có kết quả chính xác 100%.</p>
+        </div>
+        
+        <div class="row g-4 mt-2">
+            <!-- Wolfram Alpha Card -->
+            <div class="col-md-6">
+                <div class="topic-card h-100 scale-hover p-4 d-flex flex-column align-items-center text-center">
+                    <div class="bg-danger bg-opacity-10 p-4 rounded-circle mb-3">
+                        <i class="bi bi-stars text-danger fs-1"></i>
+                    </div>
+                    <h4 class="text-white">Wolfram Alpha</h4>
+                    <p class="text-muted small">Giải tích, Đại số, Số học và mọi vấn đề khoa học với độ chi tiết cực cao (từng bước giải).</p>
+                    <a href="https://www.wolframalpha.com/" target="_blank" class="btn btn-danger rounded-pill px-4 mt-auto">
+                        Mở Wolfram Alpha <i class="bi bi-box-arrow-up-right ms-2"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Matrix Calculator Card -->
+            <div class="col-md-6">
+                <div class="topic-card h-100 scale-hover p-4 d-flex flex-column align-items-center text-center">
+                    <div class="bg-primary bg-opacity-10 p-4 rounded-circle mb-3">
+                        <i class="bi bi-grid-3x3 text-primary fs-1"></i>
+                    </div>
+                    <h4 class="text-white">Matrix Calculator</h4>
+                    <p class="text-muted small">Tính toán ma trận cấp n, tìm định thức, nghịch đảo, trị riêng... với giao diện chuyên nghiệp.</p>
+                    <a href="https://matrixcalc.org/vi/" target="_blank" class="btn btn-primary rounded-pill px-4 mt-auto">
+                        Mở Máy tính Ma trận <i class="bi bi-box-arrow-up-right ms-2"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="alert alert-info mt-5 bg-dark bg-opacity-25 border-info border-opacity-25">
+            <i class="bi bi-info-circle me-2"></i>
+            <strong>Lưu ý:</strong> Bạn sẽ được chuyển hướng sang tab mới để sử dụng các công cụ này. Điều này đảm bảo bạn luôn tiếp cận được những tính năng mới nhất và độ chính xác tuyệt đối.
+        </div>
+    `;
+    elements.contentArea.appendChild(container);
+}
+
+// [Legacy Matrix & Solver functions removed - replaced by external tools suite above]
 
 // Event Listeners
 function setupEventListeners() {
@@ -399,13 +468,28 @@ function setupEventListeners() {
                 if (type === 'currentSubject') {
                     state.currentSubject = id === 'all' ? null : id;
                     state.currentChapter = null;
+                    state.activeTool = null;
                 } else if (type === 'currentChapter') {
                     state.currentChapter = id;
                     state.currentSubject = filterBtn.dataset.subjectId;
+                    state.activeTool = null;
+                } else if (type === 'tool') {
+                    state.activeTool = id;
+                    // Reset other filters to avoid confusion
+                    state.currentSubject = null;
+                    state.currentChapter = null;
+                    state.currentCategory = null;
                 } else {
                     state[type] = id === 'all' ? null : id;
+                    state.activeTool = null;
                 }
                 
+                // Active Class Management for non-accordion tools
+                if (type === 'tool' || id === 'all') {
+                    document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+                    filterBtn.classList.add('active');
+                }
+
                 // Scroll to top of results on mobile, unless it's just toggling the accordion
                 if(window.innerWidth < 992 && !filterBtn.hasAttribute('data-bs-toggle')) {
                     window.scrollTo({ top: 0, behavior: 'smooth' });
