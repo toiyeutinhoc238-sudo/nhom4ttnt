@@ -162,6 +162,35 @@
     <script src="assets/js/app.js"></script>
 
     <!-- Nút Chatbot Poe nổi góc phải dưới -->
+    <style>
+        .chatbot-floating-btn {
+            position: fixed !important;
+            bottom: 25px !important;
+            right: 25px !important;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+            color: white !important;
+            padding: 12px 20px !important;
+            border-radius: 30px !important;
+            font-weight: 600 !important;
+            box-shadow: 0 4px 15px rgba(118, 75, 162, 0.4) !important;
+            transition: all 0.3s ease !important;
+            z-index: 9999 !important;
+            text-decoration: none !important;
+            display: flex !important;
+            align-items: center !important;
+            gap: 8px !important;
+        }
+
+        .chatbot-floating-btn:hover {
+            transform: translateY(-5px) scale(1.05) !important;
+            box-shadow: 0 6px 20px rgba(118, 75, 162, 0.6) !important;
+            color: white !important;
+        }
+
+        .chatbot-floating-btn i {
+            font-size: 1.25rem !important;
+        }
+    </style>
     <a href="https://poe.com/TRO_GIANG_CO_SO_TOAN" target="_blank" class="chatbot-floating-btn shadow-lg">
         <i class="bi bi-robot"></i> Trợ lý Toán (Poe)
     </a>
