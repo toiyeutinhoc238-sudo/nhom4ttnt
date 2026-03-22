@@ -163,7 +163,11 @@ function renderTopicsChunk(isNew = false) {
         const subject = state.data.subjects.find(s => s.id === topic.subject_id);
         const category = state.data.categories.find(c => c.id === topic.category_id);
         
-        let cleanContent = topic.content.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+        let cleanContent = topic.content
+            .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
+            .replace(/\\subsubsection\*?\{([^}]+)\}/g, '<h5 class="mt-4 mb-3 text-primary">$1</h5>')
+            .replace(/\\subsection\*?\{([^}]+)\}/g, '<h4 class="mt-4 mb-3 text-primary">$1</h4>')
+            .replace(/\\section\*?\{([^}]+)\}/g, '<h3 class="mt-4 mb-3 text-primary">$1</h3>');
         const tagsHtml = topic.tags.map(tag => `<span class="tag-badge">#${tag}</span>`).join(' ');
 
         let relatedHtml = '';
