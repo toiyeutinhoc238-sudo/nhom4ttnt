@@ -8,6 +8,7 @@ const state = {
     data: null,
     fuse: null,
     currentSubject: null,
+    currentChapter: null,
     currentCategory: null,
     searchQuery: "",
     isMobile: window.innerWidth < 992,
@@ -107,9 +108,57 @@ async function init() {
 
 // Generate UI Filters
 function renderFilters() {
-    const renderButtons = (items, container, type, isMobile) => {
+    const renderSubjectButtons = (items, container, isMobile) => {
+        const accId = isMobile ? 'subAccMobile' : 'subAcc';
         container.innerHTML = `
-            <button class="filter-btn position-relative ${state[type] === null ? 'active' : ''}" data-type="${type}" data-id="all" ${isMobile ? 'data-bs-dismiss="offcanvas"' : ''}>
+            <div class="accordion accordion-flush" id="${accId}">
+                <button class="filter-btn mb-2 w-100 text-start ${state.currentSubject === null ? 'active' : ''}" data-type="currentSubject" data-id="all" ${isMobile ? 'data-bs-dismiss="offcanvas"' : ''}>
+                    Tất cả
+                </button>
+        `;
+        let html = '';
+        items.forEach(item => {
+            const isSubActive = state.currentSubject === item.id;
+            const showClass = isSubActive ? 'show' : '';
+            const downIcon = `<i class="bi bi-chevron-down small text-muted"></i>`;
+            
+            let chaptersHtml = `
+                <button class="filter-btn w-100 text-start ps-4 mb-1 border-0 bg-transparent ${isSubActive && state.currentChapter === null ? 'text-primary fw-bold' : 'text-muted'}" style="${isSubActive && state.currentChapter === null ? 'border-left: 2px solid var(--bs-primary) !important;' : ''}" data-type="currentSubject" data-id="${item.id}" ${isMobile ? 'data-bs-dismiss="offcanvas"' : ''}>
+                    Chung (${item.name})
+                </button>
+            `;
+            if (item.chapters) {
+                item.chapters.forEach(ch => {
+                    const isChActive = state.currentChapter === ch.id;
+                    chaptersHtml += `
+                        <button class="filter-btn w-100 text-start ps-4 mb-1 border-0 bg-transparent ${isChActive ? 'text-primary fw-bold' : 'text-muted'}" style="${isChActive ? 'border-left: 2px solid var(--bs-primary) !important;' : ''}" data-type="currentChapter" data-id="${ch.id}" data-subject-id="${item.id}" ${isMobile ? 'data-bs-dismiss="offcanvas"' : ''}>
+                            ${ch.name}
+                        </button>
+                    `;
+                });
+            }
+            
+            html += `
+                <div class="accordion-item bg-transparent border-0 mb-2">
+                    <h2 class="accordion-header m-0 p-0">
+                        <button class="filter-btn w-100 d-flex justify-content-between align-items-center ${isSubActive ? 'active' : ''}" data-type="currentSubject" data-id="${item.id}" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-${accId}-${item.id}">
+                            <span>${item.name}</span> ${downIcon}
+                        </button>
+                    </h2>
+                    <div id="collapse-${accId}-${item.id}" class="accordion-collapse collapse ${showClass}" data-bs-parent="#${accId}">
+                        <div class="accordion-body p-0 pt-2 pb-1 border-start border-secondary border-opacity-25 ms-3">
+                            ${chaptersHtml}
+                        </div>
+                    </div>
+                </div>
+            `;
+        });
+        container.innerHTML += html + '</div>';
+    };
+
+    const renderCategoryButtons = (items, container, type, isMobile) => {
+        container.innerHTML = `
+            <button class="filter-btn w-100 text-start mb-2 ${state[type] === null ? 'active' : ''}" data-type="${type}" data-id="all" ${isMobile ? 'data-bs-dismiss="offcanvas"' : ''}>
                 Tất cả
             </button>
         `;
@@ -117,19 +166,19 @@ function renderFilters() {
             const isActive = state[type] === item.id ? 'active' : '';
             const icon = item.icon ? `<i class="bi ${item.icon} me-2 text-muted"></i>` : '';
             container.innerHTML += `
-                <button class="filter-btn d-flex align-items-center ${isActive}" data-type="${type}" data-id="${item.id}" ${isMobile ? 'data-bs-dismiss="offcanvas"' : ''}>
+                <button class="filter-btn w-100 text-start mb-2 d-flex align-items-center ${isActive}" data-type="${type}" data-id="${item.id}" ${isMobile ? 'data-bs-dismiss="offcanvas"' : ''}>
                     ${icon}${item.name}
                 </button>
             `;
         });
     };
 
-    renderButtons(state.data.subjects, elements.subjectFilters, 'currentSubject', false);
-    renderButtons(state.data.categories, elements.categoryFilters, 'currentCategory', false);
+    renderSubjectButtons(state.data.subjects, elements.subjectFilters, false);
+    renderCategoryButtons(state.data.categories, elements.categoryFilters, 'currentCategory', false);
     
     // Clone for mobile offcanvas
-    renderButtons(state.data.subjects, elements.mobileSubjectFilters, 'currentSubject', true);
-    renderButtons(state.data.categories, elements.mobileCategoryFilters, 'currentCategory', true);
+    renderSubjectButtons(state.data.subjects, elements.mobileSubjectFilters, true);
+    renderCategoryButtons(state.data.categories, elements.mobileCategoryFilters, 'currentCategory', true);
 }
 
 // Render Topics to Screen in Chunks
@@ -272,6 +321,12 @@ function applyFiltersAndSearch() {
         elements.subjectBreadcrumb.classList.add('d-none');
     }
 
+    // 2.5. Chapter Filter
+    if (state.currentChapter) {
+        results = results.filter(t => t.chapter_id === state.currentChapter);
+        updateBreadcrumb();
+    }
+
     // 3. Category Filter
     if (state.currentCategory && state.currentCategory !== 'all') {
         results = results.filter(t => t.category_id === state.currentCategory);
@@ -285,7 +340,12 @@ function applyFiltersAndSearch() {
 function updateBreadcrumb() {
     if(state.currentSubject && state.currentSubject !== 'all') {
         const subject = state.data.subjects.find(s => s.id === state.currentSubject);
-        elements.subjectBreadcrumb.textContent = subject ? subject.name : '';
+        let text = subject ? subject.name : '';
+        if (state.currentChapter && subject && subject.chapters) {
+            const chap = subject.chapters.find(c => c.id === state.currentChapter);
+            if (chap) text += ` > ${chap.name}`;
+        }
+        elements.subjectBreadcrumb.textContent = text;
         elements.subjectBreadcrumb.classList.remove('d-none');
     }
 }
@@ -293,6 +353,7 @@ function updateBreadcrumb() {
 // Expose clear function to global scope for HTML inline calls
 window.clearFilters = function() {
     state.currentSubject = null;
+    state.currentChapter = null;
     state.currentCategory = null;
     state.searchQuery = "";
     elements.searchInput.value = "";
@@ -331,17 +392,27 @@ function setupEventListeners() {
     document.addEventListener('click', (e) => {
         const filterBtn = e.target.closest('.filter-btn');
         if (filterBtn) {
-            const type = filterBtn.dataset.type; // 'currentSubject' or 'currentCategory'
+            const type = filterBtn.dataset.type;
             const id = filterBtn.dataset.id;
             
-            state[type] = id === 'all' ? null : id;
-            
-            // Scroll to top of results on mobile
-            if(window.innerWidth < 992) {
-                window.scrollTo({ top: 0, behavior: 'smooth' });
+            if (type) {
+                if (type === 'currentSubject') {
+                    state.currentSubject = id === 'all' ? null : id;
+                    state.currentChapter = null;
+                } else if (type === 'currentChapter') {
+                    state.currentChapter = id;
+                    state.currentSubject = filterBtn.dataset.subjectId;
+                } else {
+                    state[type] = id === 'all' ? null : id;
+                }
+                
+                // Scroll to top of results on mobile, unless it's just toggling the accordion
+                if(window.innerWidth < 992 && !filterBtn.hasAttribute('data-bs-toggle')) {
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                }
+                
+                applyFiltersAndSearch();
             }
-            
-            applyFiltersAndSearch();
         }
 
         // Home Breadcrumb
@@ -364,6 +435,7 @@ function setupEventListeners() {
                 elements.searchInput.value = "";
                 elements.clearSearchBtn.classList.add('d-none');
                 state.currentSubject = targetTopic.subject_id;
+                state.currentChapter = targetTopic.chapter_id || null;
                 state.currentCategory = targetTopic.category_id;
                 
                 // Directly render just this topic to stand out

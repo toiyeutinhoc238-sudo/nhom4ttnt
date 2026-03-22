@@ -117,6 +117,12 @@ function cleanLatexBody(body) {
     body = body.replace(/\\begin\{align\*?\}([\s\S]*?)\\end\{align\*?\}/g, '$$\n\\begin{aligned}$1\\end{aligned}\n$$');
     body = body.replace(/\\begin\{equation\*?\}([\s\S]*?)\\end\{equation\*?\}/g, '$$\n$1\n$$');
     
+    // Handle code listings
+    body = body.replace(/\\begin\{lstlisting\}(?:\[[^\]]*\])?\s*([\s\S]*?)\\end\{lstlisting\}/g, (m, code) => {
+        let escapedCode = code.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        return `<pre class="bg-black text-light p-3 rounded lh-sm my-3 border border-secondary font-monospace" style="overflow-x: auto; font-size: 0.9rem;"><code>${escapedCode}</code></pre>`;
+    });
+    
     // Replace text formatting
     body = replaceLatexCommand(body, 'textbf', '<strong>', '</strong>');
     body = replaceLatexCommand(body, 'textit', '<em>', '</em>');
@@ -159,7 +165,8 @@ let topicIdCounter = 100;
 
 const subjectMap = {
     1: 'gt1', 2: 'gt1', 3: 'gt1', 4: 'gt1', 5: 'gt1',
-    6: 'dstt', 7: 'dstt', 8: 'dstt', 9: 'dstt', 10: 'dstt', 11: 'dstt', 12: 'dstt', 13: 'dstt', 14: 'dstt', 15: 'dstt'
+    6: 'dstt', 7: 'dstt', 8: 'dstt', 9: 'dstt', 10: 'dstt', 11: 'dstt', 12: 'dstt', 13: 'dstt', 
+    14: 'other', 15: 'other'
 };
 
 const chapters = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15];
@@ -181,7 +188,7 @@ chapters.forEach(i => {
     
     while (currentIndex < content.length) {
         const boundaries = [
-            { type: 'tcolorbox', regex: /\\begin\{tcolorbox\}\s*\[[\s\S]*?title=\{([^}]+)\}[\s\S]*?\]/g },
+            { type: 'tcolorbox', regex: /\\begin\{tcolorbox\}(?:\s*\[(?:(?!\\end\{tcolorbox\})[\s\S])*?\])?/g },
             { type: 'example', regex: /\\begin\{example\}/g },
             { type: 'table', regex: /\\begin\{table\}/g }
         ];
@@ -202,7 +209,8 @@ chapters.forEach(i => {
         let categoryId = 'concept';
         
         if (nearest.type === 'tcolorbox') {
-            title = nearest.match[1].trim();
+            let titleMatch = nearest.match[0].match(/title=\{([^}]*)\}/);
+            title = (titleMatch && titleMatch[1].trim()) || "Kiến thức trọng tâm";
             const endMatch = /\\end\{tcolorbox\}/g;
             endMatch.lastIndex = blockStart;
             const end = endMatch.exec(content);
@@ -270,7 +278,8 @@ chapters.forEach(i => {
         if (cleanedBody && cleanedBody.length > 0) {
             newTopics.push({
                 id: `auto-${topicIdCounter++}`,
-                subject_id: subjectMap[i] || 'dstt',
+                subject_id: subjectMap[i] || 'other',
+                chapter_id: `ch${i}`,
                 category_id: categoryId,
                 title: title + ` (Chương ${i})`,
                 content: cleanedBody,
@@ -284,7 +293,8 @@ chapters.forEach(i => {
     // PDF document link
     newTopics.push({
         id: `auto-${topicIdCounter++}`,
-        subject_id: subjectMap[i] || 'dstt',
+        subject_id: subjectMap[i] || 'other',
+        chapter_id: `ch${i}`,
         category_id: 'exercise',
         title: `Bài tập tổng hợp (Chương ${i})`,
         content: `
@@ -321,6 +331,24 @@ chapters.forEach(i => {
 });
 
 data.topics = newTopics;
+
+data.subjects = [
+    {
+      "id": "gt1",
+      "name": "Giải tích 1",
+      "chapters": [1,2,3,4,5].map(i => ({id: "ch"+i, name: "Chương "+i}))
+    },
+    {
+      "id": "dstt",
+      "name": "Đại số tuyến tính",
+      "chapters": [6,7,8,9,10,11,12,13].map(i => ({id: "ch"+i, name: "Chương "+i}))
+    },
+    {
+      "id": "other",
+      "name": "Phần khác",
+      "chapters": [14,15].map(i => ({id: "ch"+i, name: "Chương "+i}))
+    }
+];
 
 fs.writeFileSync(dstFile, JSON.stringify(data, null, 2));
 console.log(`\nSuccessfully added ${newTopics.length} new topics from LaTeX source to data.json`);
