@@ -1,0 +1,32 @@
+\documentclass[tikz,border=2mm]{standalone}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[vietnamese]{babel}
+\usepackage{amsmath,amssymb}
+\usepackage{pgfplots}
+\pgfplotsset{compat=newest}
+\begin{document}
+\begin{tikzpicture}
+		\begin{axis}[
+			axis lines = middle,
+			xlabel = {$x$},
+			ylabel = {$y$},
+			ymin = -1.2, ymax = 3.5, 
+			xmin = -0.5, xmax = 4.5,
+			xtick = {1,2,3,4},
+			ytick = {1,2,3},
+			width = 10cm, height = 7.5cm, 
+			samples = 100,
+			domain = 0:4,
+			clip=false
+			]
+			
+			\addplot[blue, thick, domain=2:4] {x-2};
+			
+			\addplot[blue, thick, domain=0:2] {2-x} node[pos=0.2, above right] {$y = |x-2|$};
+			
+			
+			\addplot[mark=*, red] coordinates {(2,0)} node[below, yshift=-0.6cm, black] {Điểm gãy khúc $(2,0)$};
+		\end{axis}
+	\end{tikzpicture}
+\end{document}

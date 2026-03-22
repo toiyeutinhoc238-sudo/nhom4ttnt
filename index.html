@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="vi" data-bs-theme="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MathBase - Hệ thống tra cứu cơ sở Toán</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <!-- KaTeX CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.css">
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg glass-header fixed-top">
+        <div class="container-fluid px-4">
+            <a class="navbar-brand d-flex align-items-center gap-2" href="#">
+                <div class="brand-icon">
+                    <i class="bi bi-infinity"></i>
+                </div>
+                <span class="brand-text">Math<span class="text-gradient">Base</span></span>
+            </a>
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarContent">
+                <form class="d-flex mx-lg-auto search-form position-relative" id="mainSearchForm">
+                    <i class="bi bi-search search-icon"></i>
+                    <input class="form-control search-input" type="search" id="searchInput"
+                        placeholder="Tìm kiếm công thức, khái niệm (VD: dao ham)..." aria-label="Search"
+                        autocomplete="off">
+                    <button type="button" class="btn btn-clear position-absolute d-none" id="clearSearchBtn">
+                        <i class="bi bi-x-circle-fill"></i>
+                    </button>
+                </form>
+
+                <ul class="navbar-nav mb-2 mb-lg-0">
+                    <li class="nav-item d-flex align-items-center">
+                        <a class="nav-link" href="https://github.com" target="_blank" title="GitHub Repo">
+                            <i class="bi bi-github fs-5"></i>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container-fluid layout-container fade-in">
+        <div class="row h-100">
+            <!-- Sidebar -->
+            <aside class="col-lg-3 sidebar-glass p-4 d-none d-lg-block" id="sidebar">
+                <div class="sidebar-content">
+                    <h6 class="sidebar-heading text-uppercase text-muted mb-3 d-flex align-items-center gap-2">
+                        <i class="bi bi-funnel"></i> Môn học
+                    </h6>
+                    <div id="subjectFilters" class="mb-4 d-flex flex-column gap-2">
+                        <!-- Rendered by JS -->
+                    </div>
+
+                    <h6 class="sidebar-heading text-uppercase text-muted mb-3 d-flex align-items-center gap-2">
+                        <i class="bi bi-tags"></i> Phân loại kiến thức
+                    </h6>
+                    <div id="categoryFilters" class="mb-4 d-flex flex-column gap-2">
+                        <!-- Rendered by JS -->
+                    </div>
+
+                    <div class="mt-auto pt-4 border-top border-secondary-subtle copyright-section text-muted small">
+                        <p class="mb-1"><i class="bi bi-code-slash text-primary"></i> Đồ án Cơ sở Toán - Web tĩnh</p>
+                        <p class="mb-0">Powered by Fuse.js & KaTeX</p>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- Main Panel -->
+            <main class="col-lg-9 ms-auto p-4 p-md-5 main-panel">
+                <!-- Mobile Filters Toggle -->
+                <div class="d-lg-none mb-4">
+                    <button class="btn btn-glass w-100 d-flex align-items-center justify-content-center gap-2"
+                        type="button" data-bs-toggle="offcanvas" data-bs-target="#mobileFilters">
+                        <i class="bi bi-filter-left"></i> Hiện bộ lọc Môn học & Phân loại
+                    </button>
+                </div>
+
+                <!-- Breadcrumb -->
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb" id="dynamicBreadcrumb">
+                        <li class="breadcrumb-item"><a href="#" id="homeBreadcrumb"><i class="bi bi-house-door"></i>
+                                Khám phá</a></li>
+                        <li class="breadcrumb-item active d-none" aria-current="page" id="subjectBreadcrumb">Giải tích 1
+                        </li>
+                    </ol>
+                </nav>
+
+                <!-- Status Bar (Results count) -->
+                <div class="d-flex justify-content-between align-items-end mb-4 search-status d-none"
+                    id="searchStatusArea">
+                    <h4 class="mb-0" id="searchStatusText">Kết quả tìm kiếm cho ""</h4>
+                    <span class="badge rounded-pill bg-primary align-self-center mt-2" id="searchResultCount">0 kết
+                        quả</span>
+                </div>
+
+                <!-- Content Area -->
+                <div id="contentArea">
+                    <!-- Cards will be injected here -->
+                    <div class="text-center py-5 my-5 text-muted" id="loadingState">
+                        <div class="spinner-border text-primary mb-3" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                        <p>Đang tải dữ liệu toán học...</p>
+                    </div>
+                </div>
+
+            </main>
+        </div>
+    </div>
+
+    <!-- Mobile Offcanvas Filters -->
+    <div class="offcanvas offcanvas-start theme-dark" tabindex="-1" id="mobileFilters"
+        aria-labelledby="mobileFiltersLabel">
+        <div class="offcanvas-header border-bottom border-secondary-subtle">
+            <h5 class="offcanvas-title" id="mobileFiltersLabel"><i class="bi bi-funnel"></i> Bộ lọc</h5>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"
+                aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body">
+            <!-- Will clone sidebar content here via JS or just duplicate for simplicity initially -->
+            <h6 class="text-uppercase text-muted mb-3">Môn học</h6>
+            <div id="mobileSubjectFilters" class="mb-4 d-flex flex-column gap-2"></div>
+
+            <h6 class="text-uppercase text-muted mb-3 mt-4">Phân loại</h6>
+            <div id="mobileCategoryFilters" class="mb-4 d-flex flex-column gap-2"></div>
+        </div>
+    </div>
+
+    <!-- Back to top button -->
+    <button class="btn btn-primary rounded-circle back-to-top shadow-lg btn-glass scale-hover" id="btnBackToTop"
+        title="Lên đầu trang">
+        <i class="bi bi-arrow-up"></i>
+    </button>
+
+    <!-- Scripts -->
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Fuse.js -->
+    <script src="https://cdn.jsdelivr.net/npm/fuse.js@7.0.0"></script>
+    <!-- KaTeX JS -->
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/contrib/auto-render.min.js"></script>
+    <!-- App Logic -->
+    <script src="assets/js/app.js"></script>
+</body>
+
+</html>
