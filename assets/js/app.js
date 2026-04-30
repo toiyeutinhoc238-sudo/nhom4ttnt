@@ -215,11 +215,56 @@ function renderTopicsChunk(isNew = false) {
         const subject = state.data.subjects.find(s => s.id === topic.subject_id);
         const category = state.data.categories.find(c => c.id === topic.category_id);
         
+        // Robust LaTeX heading replacement that handles nested braces
+        const replaceLatexHeading = (text, command) => {
+            let result = text;
+            const cmd = `\\\\${command}\\*?\\{`;
+            const regex = new RegExp(cmd, 'g');
+            let match;
+            
+            while ((match = regex.exec(result)) !== null) {
+                let start = match.index;
+                let braceStart = start + match[0].length - 1;
+                let braceCount = 0;
+                let braceEnd = -1;
+                
+                for (let i = braceStart; i < result.length; i++) {
+                    if (result[i] === '{') braceCount++;
+                    else if (result[i] === '}') braceCount--;
+                    
+                    if (braceCount === 0) {
+                        braceEnd = i;
+                        break;
+                    }
+                }
+                
+                if (braceEnd !== -1) {
+                    const content = result.substring(braceStart + 1, braceEnd);
+                    const tag = command === 'section' ? 'h3' : (command === 'subsection' ? 'h4' : 'h5');
+                    const fsClass = command === 'section' ? 'fs-4' : (command === 'subsection' ? 'fs-5' : 'fs-6');
+                    const fullMatch = result.substring(start, braceEnd + 1);
+                    result = result.replace(fullMatch, `<${tag} class="mt-2 mb-1 text-primary ${fsClass}">${content}</${tag}>`);
+                    regex.lastIndex = 0;
+                }
+            }
+            return result;
+        };
+
         let cleanContent = topic.content
-            .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
-            .replace(/\\subsubsection\*?\{([^}]+)\}/g, '<h5 class="mt-4 mb-3 text-primary">$1</h5>')
-            .replace(/\\subsection\*?\{([^}]+)\}/g, '<h4 class="mt-4 mb-3 text-primary">$1</h4>')
-            .replace(/\\section\*?\{([^}]+)\}/g, '<h3 class="mt-4 mb-3 text-primary">$1</h3>');
+            .replace(/\r\n/g, '\n')
+            .replace(/\t/g, ' ') // Convert tabs to spaces
+            .split('\n').map(line => line.trim()).join('\n')
+            .replace(/\n{3,}/g, '\n\n')
+            .replace(/\s+([.,!?;:)\]])/g, '$1')
+            .replace(/([(\[])\s+/g, '$1')
+            .replace(/\s+([.,!?;:)\]])/g, '$1')
+            .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+
+        cleanContent = replaceLatexHeading(cleanContent, 'section');
+        cleanContent = replaceLatexHeading(cleanContent, 'subsection');
+        cleanContent = replaceLatexHeading(cleanContent, 'subsubsection');
+        
+        cleanContent = cleanContent.trim();
         const tagsHtml = topic.tags.map(tag => `<span class="tag-badge">#${tag}</span>`).join(' ');
 
         let relatedHtml = '';
@@ -306,6 +351,7 @@ function applyFiltersAndSearch() {
 
     if (state.activeTool) {
         renderMathTools(state.activeTool);
+        updateBreadcrumb();
         return;
     }
 
@@ -346,15 +392,31 @@ function applyFiltersAndSearch() {
 }
 
 function updateBreadcrumb() {
+    if (state.activeTool) {
+        elements.subjectBreadcrumb.innerHTML = `<span class="text-white fw-medium"><i class="bi bi-cpu me-1 small"></i>Công cụ Chuyên nghiệp</span>`;
+        elements.subjectBreadcrumb.classList.remove('d-none');
+        return;
+    }
+
     if(state.currentSubject && state.currentSubject !== 'all') {
         const subject = state.data.subjects.find(s => s.id === state.currentSubject);
-        let text = subject ? subject.name : '';
-        if (state.currentChapter && subject && subject.chapters) {
-            const chap = subject.chapters.find(c => c.id === state.currentChapter);
-            if (chap) text += ` > ${chap.name}`;
+        if (!subject) {
+            elements.subjectBreadcrumb.classList.add('d-none');
+            return;
         }
-        elements.subjectBreadcrumb.textContent = text;
+        
+        let html = `<a href="#" class="breadcrumb-link text-decoration-none text-muted" data-type="currentSubject" data-id="${subject.id}">${subject.name}</a>`;
+        
+        if (state.currentChapter) {
+            const chap = subject.chapters.find(c => c.id === state.currentChapter);
+            if (chap) {
+                html += ` <i class="bi bi-chevron-right mx-1 small opacity-50"></i> <span class="text-white">${chap.name}</span>`;
+            }
+        }
+        elements.subjectBreadcrumb.innerHTML = html;
         elements.subjectBreadcrumb.classList.remove('d-none');
+    } else {
+        elements.subjectBreadcrumb.classList.add('d-none');
     }
 }
 
@@ -459,7 +521,7 @@ function setupEventListeners() {
 
     // Filter Buttons (Document delegation for dynamic content)
     document.addEventListener('click', (e) => {
-        const filterBtn = e.target.closest('.filter-btn');
+        const filterBtn = e.target.closest('.filter-btn') || e.target.closest('.breadcrumb-link');
         if (filterBtn) {
             const type = filterBtn.dataset.type;
             const id = filterBtn.dataset.id;

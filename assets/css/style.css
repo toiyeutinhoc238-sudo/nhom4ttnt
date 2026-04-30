@@ -101,6 +101,11 @@ body {
     color: rgba(148, 163, 184, 0.8);
     font-size: 0.9rem;
 }
+ 
+.breadcrumb-link:hover {
+    color: var(--primary-color) !important;
+    text-decoration: underline !important;
+}
 
 .search-icon {
     position: absolute;
@@ -174,7 +179,7 @@ body {
     background: var(--bg-panel);
     border: 1px solid var(--border-glass);
     border-radius: 16px;
-    padding: 1.5rem;
+    padding: 1.25rem;
     margin-bottom: 1.5rem;
     transition: all 0.3s ease;
     backdrop-filter: blur(10px);
@@ -195,23 +200,60 @@ body {
 
 .topic-content {
     color: #cbd5e1;
-    line-height: 1.7;
-    margin-bottom: 1.5rem;
+    line-height: 1.6;
+    margin-bottom: 1.2rem;
     white-space: pre-wrap;
+    text-wrap: pretty;
+    overflow-wrap: break-word;
 }
 
 /* Math rendering adjustments */
-.topic-content .katex-display {
-    background: rgba(0, 0, 0, 0.2);
-    padding: 1rem;
-    border-radius: 8px;
+.topic-content .katex {
+    font-size: 1.21rem; 
+    line-height: 1;
+    display: inline-block;
+    max-width: 100%;
     overflow-x: auto;
+    overflow-y: hidden;
+    vertical-align: middle;
+    padding: 0.1rem 0;
+    /* Hide scrollbar but keep functionality */
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+.topic-content .katex::-webkit-scrollbar {
+    display: none;
+}
+
+.topic-content .katex-display {
+    font-size: 1.35rem; 
+    background: rgba(0, 0, 0, 0.2);
+    padding: 1.25rem;
+    border-radius: 12px;
+    overflow-x: auto;
+    overflow-y: hidden;
     margin: 1rem 0;
-    border-left: 3px solid var(--primary-color);
+    border-left: 4px solid var(--primary-color);
+}
+
+/* Ensure fractions are readable */
+.topic-content .katex .mfrac {
+    font-size: 1.1em;
+}
+
+/* Container protection */
+.topic-card {
+    overflow: hidden;
+}
+
+.topic-content {
+    overflow-x: auto;
+    max-width: 100%;
 }
 
 .topic-content p {
-    margin-bottom: 1rem;
+    margin-bottom: 0.5rem;
 }
 
 /* Tags & Badges */
