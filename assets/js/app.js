@@ -17,7 +17,18 @@ const state = {
     isMobile: window.innerWidth < 992,
     currentResults: [],
     renderedCount: 0,
-    pageSize: 10
+    pageSize: 10,
+    referenceFiles: [
+        { name: "Giáo trình 1", filename: "Giaotrinh1.pdf", type: "Giáo trình" },
+        { name: "Giáo trình 2", filename: "Giaotrinh2.pdf", type: "Giáo trình" },
+        { name: "Tham khảo 1", filename: "Thamkhao1.pdf", type: "Tham khảo" },
+        { name: "Tham khảo 2", filename: "Thamkhao2.pdf", type: "Tham khảo" },
+        { name: "Tham khảo 3", filename: "Thamkhao3.pdf", type: "Tham khảo" },
+        { name: "Tham khảo 4", filename: "Thamkhao4.pdf", type: "Tham khảo" },
+        { name: "Giải tích 1 khoa CNTT", filename: "giải tích 1 khoa CNTT.pdf", type: "Bài giảng" },
+        { name: "Đại số tuyến tính trọn bộ", filename: "ĐSTT trọn bộ.pdf", type: "Bài giảng" }
+    ],
+    activeReference: false
 };
 
 // DOM Elements
@@ -349,6 +360,12 @@ window.loadMoreTopics = function() {
 function applyFiltersAndSearch() {
     let results = [...state.data.topics];
 
+    if (state.activeReference) {
+        renderReferenceMaterials();
+        updateBreadcrumb();
+        return;
+    }
+
     if (state.activeTool) {
         renderMathTools(state.activeTool);
         updateBreadcrumb();
@@ -392,6 +409,12 @@ function applyFiltersAndSearch() {
 }
 
 function updateBreadcrumb() {
+    if (state.activeReference) {
+        elements.subjectBreadcrumb.innerHTML = `<span class="text-white fw-medium"><i class="bi bi-journal-bookmark me-1 small"></i>Tài liệu tham khảo</span>`;
+        elements.subjectBreadcrumb.classList.remove('d-none');
+        return;
+    }
+
     if (state.activeTool) {
         elements.subjectBreadcrumb.innerHTML = `<span class="text-white fw-medium"><i class="bi bi-cpu me-1 small"></i>Công cụ Chuyên nghiệp</span>`;
         elements.subjectBreadcrumb.classList.remove('d-none');
@@ -426,6 +449,7 @@ window.clearFilters = function() {
     state.currentChapter = null;
     state.currentCategory = null;
     state.activeTool = null;
+    state.activeReference = false;
     state.searchQuery = "";
     elements.searchInput.value = "";
     elements.clearSearchBtn.classList.add('d-none');
@@ -490,6 +514,56 @@ function renderMathTools(toolId) {
     elements.contentArea.appendChild(container);
 }
 
+/**
+ * REFERENCE MATERIALS IMPLEMENTATION
+ */
+function renderReferenceMaterials() {
+    elements.contentArea.innerHTML = '';
+    const container = document.createElement('div');
+    container.className = 'tool-container fade-in';
+    
+    let filesHtml = '';
+    state.referenceFiles.forEach((file, index) => {
+        filesHtml += `
+            <div class="col-md-6 col-lg-4">
+                <div class="topic-card h-100 scale-hover p-4 d-flex flex-column align-items-center text-center" style="animation-delay: ${index * 0.05}s">
+                    <div class="bg-primary bg-opacity-10 p-4 rounded-circle mb-3">
+                        <i class="bi bi-file-earmark-pdf text-primary fs-1"></i>
+                    </div>
+                    <span class="badge bg-secondary bg-opacity-25 text-muted mb-2">${file.type}</span>
+                    <h5 class="text-white mb-3">${file.name}</h5>
+                    <div class="mt-auto d-flex gap-2 w-100">
+                        <a href="thamkhao/${file.filename}" target="_blank" class="btn btn-outline-light rounded-pill flex-grow-1 small py-2">
+                            <i class="bi bi-eye me-1"></i> Xem
+                        </a>
+                        <a href="thamkhao/${file.filename}" download class="btn btn-primary rounded-pill flex-grow-1 small py-2 shadow-sm" style="background: linear-gradient(45deg, #4f46e5, #9333ea); border: none;">
+                            <i class="bi bi-cloud-arrow-down me-1"></i> Tải về
+                        </a>
+                    </div>
+                </div>
+            </div>
+        `;
+    });
+
+    container.innerHTML = `
+        <div class="tool-badge">Tài liệu học tập</div>
+        <div class="tool-header mb-4">
+            <h3 class="m-0"><i class="bi bi-journal-bookmark me-2"></i>Thư viện tài liệu tham khảo</h3>
+            <p class="text-muted mt-2">Tổng hợp các giáo trình, bài giảng và tài liệu ôn tập chất lượng cao dành cho sinh viên.</p>
+        </div>
+        
+        <div class="row g-4 mt-2">
+            ${filesHtml}
+        </div>
+
+        <div class="alert alert-info mt-5 bg-dark bg-opacity-25 border-info border-opacity-25">
+            <i class="bi bi-info-circle me-2"></i>
+            <strong>Mẹo:</strong> Bạn có thể nhấn vào "Xem" để đọc trực tiếp trên trình duyệt hoặc "Tải về" để lưu trữ tài liệu offline.
+        </div>
+    `;
+    elements.contentArea.appendChild(container);
+}
+
 // [Legacy Matrix & Solver functions removed - replaced by external tools suite above]
 
 // Event Listeners
@@ -535,19 +609,28 @@ function setupEventListeners() {
                     state.currentChapter = id;
                     state.currentSubject = filterBtn.dataset.subjectId;
                     state.activeTool = null;
+                    state.activeReference = false;
                 } else if (type === 'tool') {
                     state.activeTool = id;
                     // Reset other filters to avoid confusion
                     state.currentSubject = null;
                     state.currentChapter = null;
                     state.currentCategory = null;
+                    state.activeReference = false;
+                } else if (type === 'reference') {
+                    state.activeReference = true;
+                    state.activeTool = null;
+                    state.currentSubject = null;
+                    state.currentChapter = null;
+                    state.currentCategory = null;
                 } else {
                     state[type] = id === 'all' ? null : id;
                     state.activeTool = null;
+                    state.activeReference = false;
                 }
                 
                 // Active Class Management for non-accordion tools
-                if (type === 'tool' || id === 'all') {
+                if (type === 'tool' || type === 'reference' || id === 'all') {
                     document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
                     filterBtn.classList.add('active');
                 }
