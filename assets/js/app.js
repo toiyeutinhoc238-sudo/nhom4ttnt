@@ -45,11 +45,16 @@ const elements = {
     searchResultCount: document.getElementById('searchResultCount'),
     homeBreadcrumb: document.getElementById('homeBreadcrumb'),
     subjectBreadcrumb: document.getElementById('subjectBreadcrumb'),
-    btnBackToTop: document.getElementById('btnBackToTop')
+    btnBackToTop: document.getElementById('btnBackToTop'),
+    themeToggle: document.getElementById('themeToggle')
 };
 
 // Initialization
 async function init() {
+    // Basic UI logic that doesn't depend on external data
+    setupEventListeners();
+    initTheme();
+
     try {
         const response = await fetch('assets/data.json');
         if (!response.ok) throw new Error("Failed to fetch data");
@@ -69,7 +74,6 @@ async function init() {
         state.fuse = new Fuse(state.data.topics, fuseOptions);
 
         renderFilters();
-        setupEventListeners();
         
         // Initial render: process chunks instead of whole list
         state.currentResults = state.data.topics;
@@ -568,30 +572,49 @@ function renderReferenceMaterials() {
 
 // Event Listeners
 function setupEventListeners() {
-    // Search Input Logic
-    elements.searchInput.addEventListener('input', (e) => {
-        state.searchQuery = e.target.value;
-        if(state.searchQuery.length > 0) {
-            elements.clearSearchBtn.classList.remove('d-none');
-        } else {
-            elements.clearSearchBtn.classList.add('d-none');
-        }
-        applyFiltersAndSearch();
-    });
+    // Theme Toggle Logic (Priority: should work even if other UI elements fail)
+    if (elements.themeToggle) {
+        elements.themeToggle.addEventListener('click', () => {
+            const currentTheme = document.documentElement.getAttribute('data-bs-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            
+            document.documentElement.setAttribute('data-bs-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            updateThemeIcon(newTheme);
+        });
+    }
 
-    elements.clearSearchBtn.addEventListener('click', () => {
-        state.searchQuery = "";
-        elements.searchInput.value = "";
-        elements.clearSearchBtn.classList.add('d-none');
-        elements.searchInput.focus();
-        applyFiltersAndSearch();
-    });
+    // Search Input Logic
+    if (elements.searchInput) {
+        elements.searchInput.addEventListener('input', (e) => {
+            state.searchQuery = e.target.value;
+            if(state.searchQuery.length > 0) {
+                elements.clearSearchBtn?.classList.remove('d-none');
+            } else {
+                elements.clearSearchBtn?.classList.add('d-none');
+            }
+            applyFiltersAndSearch();
+        });
+    }
+
+    if (elements.clearSearchBtn) {
+        elements.clearSearchBtn.addEventListener('click', () => {
+            state.searchQuery = "";
+            elements.searchInput.value = "";
+            elements.clearSearchBtn.classList.add('d-none');
+            elements.searchInput.focus();
+            applyFiltersAndSearch();
+        });
+    }
 
     // Form submit prevention
-    document.getElementById('mainSearchForm').addEventListener('submit', e => {
-        e.preventDefault();
-        elements.searchInput.blur(); // dismiss keyboard on mobile
-    });
+    const mainSearchForm = document.getElementById('mainSearchForm');
+    if (mainSearchForm) {
+        mainSearchForm.addEventListener('submit', e => {
+            e.preventDefault();
+            elements.searchInput?.blur(); // dismiss keyboard on mobile
+        });
+    }
 
     // Filter Buttons (Document delegation for dynamic content)
     document.addEventListener('click', (e) => {
@@ -686,9 +709,26 @@ function setupEventListeners() {
         }
     });
 
-    elements.btnBackToTop.addEventListener('click', () => {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-    });
+    if (elements.btnBackToTop) {
+        elements.btnBackToTop.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    }
+}
+
+function initTheme() {
+    const savedTheme = localStorage.getItem('theme') || 'dark';
+    updateThemeIcon(savedTheme);
+}
+
+function updateThemeIcon(theme) {
+    if (!elements.themeToggle) return;
+    const icon = elements.themeToggle.querySelector('i');
+    if (theme === 'dark') {
+        icon.className = 'bi bi-moon-stars-fill';
+    } else {
+        icon.className = 'bi bi-sun-fill';
+    }
 }
 
 // Boot application
