@@ -302,10 +302,10 @@ chapters.forEach(i => {
     <div class="mb-4">
         <i class="bi bi-file-earmark-pdf-fill text-danger text-opacity-75" style="font-size: 5rem; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.3));"></i>
     </div>
-    <h4 class="text-white mb-3">Tài liệu Bài tập Chương ${i}</h4>
+    <h4 class="fw-bold mb-3">Tài liệu Bài tập Chương ${i}</h4>
     <p class="text-muted mb-4">Nhấn vào nút bên dưới để xem trực tiếp hoặc tải tài liệu bài tập PDF đầy đủ về máy.</p>
     <div class="d-flex justify-content-center gap-3 mb-4">
-        <a href="assets/pdfs/chuong${i}.pdf" target="_blank" class="btn btn-outline-light rounded-pill px-4 py-2">
+        <a href="assets/pdfs/chuong${i}.pdf" target="_blank" class="btn btn-glass rounded-pill px-4 py-2">
             <i class="bi bi-box-arrow-up-right me-2"></i> Mở cửa sổ mới
         </a>
         <a href="assets/pdfs/chuong${i}.pdf" download class="btn btn-primary rounded-pill px-4 py-2 shadow-sm" style="background: linear-gradient(45deg, #4f46e5, #9333ea); border: none;">

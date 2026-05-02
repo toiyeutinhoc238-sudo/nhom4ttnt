@@ -213,7 +213,7 @@ function renderTopicsChunk(isNew = false) {
         elements.contentArea.innerHTML = `
             <div class="text-center py-5 my-5">
                 <i class="bi bi-search text-muted" style="font-size: 3rem;"></i>
-                <h4 class="mt-3 text-white">Không tìm thấy kết quả</h4>
+                <h4 class="mt-3">Không tìm thấy kết quả</h4>
                 <p class="text-muted">Thử thay đổi từ khóa hoặc bộ lọc xem sao.</p>
                 <button class="btn btn-primary mt-2 rounded-pill px-4" onclick="clearFilters()">Xóa tất cả bộ lọc</button>
             </div>
@@ -348,7 +348,7 @@ function renderTopicsChunk(isNew = false) {
         btnContainer.id = 'loadMoreBtnContainer';
         btnContainer.className = 'text-center my-4 fade-in';
         btnContainer.innerHTML = `
-            <button class="btn btn-outline-light rounded-pill px-5 py-2 shadow-sm border-secondary border-opacity-50" onclick="loadMoreTopics()">
+            <button class="btn btn-glass rounded-pill px-5 py-2 shadow-sm border-secondary border-opacity-50" onclick="loadMoreTopics()">
                 <i class="bi bi-arrow-down-circle me-2"></i> Tải thêm (${state.currentResults.length - state.renderedCount} bài viết)
             </button>
         `;
@@ -382,7 +382,7 @@ function applyFiltersAndSearch() {
         results = searchResults.map(res => res.item);
         
         elements.searchStatusArea.classList.remove('d-none');
-        elements.searchStatusText.innerHTML = `Kết quả cho "<span class="text-white">${state.searchQuery}</span>"`;
+        elements.searchStatusText.innerHTML = `Kết quả cho "<span class="text-primary fw-bold">${state.searchQuery}</span>"`;
         elements.searchResultCount.textContent = `${results.length} kết quả`;
     } else {
         elements.searchStatusArea.classList.add('d-none');
@@ -414,13 +414,13 @@ function applyFiltersAndSearch() {
 
 function updateBreadcrumb() {
     if (state.activeReference) {
-        elements.subjectBreadcrumb.innerHTML = `<span class="text-white fw-medium"><i class="bi bi-journal-bookmark me-1 small"></i>Tài liệu tham khảo</span>`;
+        elements.subjectBreadcrumb.innerHTML = `<span class="fw-medium"><i class="bi bi-journal-bookmark me-1 small"></i>Tài liệu tham khảo</span>`;
         elements.subjectBreadcrumb.classList.remove('d-none');
         return;
     }
 
     if (state.activeTool) {
-        elements.subjectBreadcrumb.innerHTML = `<span class="text-white fw-medium"><i class="bi bi-cpu me-1 small"></i>Công cụ Chuyên nghiệp</span>`;
+        elements.subjectBreadcrumb.innerHTML = `<span class="fw-medium"><i class="bi bi-cpu me-1 small"></i>Công cụ Chuyên nghiệp</span>`;
         elements.subjectBreadcrumb.classList.remove('d-none');
         return;
     }
@@ -437,7 +437,7 @@ function updateBreadcrumb() {
         if (state.currentChapter) {
             const chap = subject.chapters.find(c => c.id === state.currentChapter);
             if (chap) {
-                html += ` <i class="bi bi-chevron-right mx-1 small opacity-50"></i> <span class="text-white">${chap.name}</span>`;
+                html += ` <i class="bi bi-chevron-right mx-1 small opacity-50"></i> <span class="fw-bold">${chap.name}</span>`;
             }
         }
         elements.subjectBreadcrumb.innerHTML = html;
@@ -487,7 +487,7 @@ function renderMathTools(toolId) {
                     <div class="bg-danger bg-opacity-10 p-4 rounded-circle mb-3">
                         <i class="bi bi-stars text-danger fs-1"></i>
                     </div>
-                    <h4 class="text-white">Wolfram Alpha</h4>
+                    <h4 class="fw-bold">Wolfram Alpha</h4>
                     <p class="text-muted small">Giải tích, Đại số, Số học và mọi vấn đề khoa học với độ chi tiết cực cao (từng bước giải).</p>
                     <a href="https://www.wolframalpha.com/" target="_blank" class="btn btn-danger rounded-pill px-4 mt-auto">
                         Mở Wolfram Alpha <i class="bi bi-box-arrow-up-right ms-2"></i>
@@ -501,7 +501,7 @@ function renderMathTools(toolId) {
                     <div class="bg-primary bg-opacity-10 p-4 rounded-circle mb-3">
                         <i class="bi bi-grid-3x3 text-primary fs-1"></i>
                     </div>
-                    <h4 class="text-white">Matrix Calculator</h4>
+                    <h4 class="fw-bold">Matrix Calculator</h4>
                     <p class="text-muted small">Tính toán ma trận cấp n, tìm định thức, nghịch đảo, trị riêng... với giao diện chuyên nghiệp.</p>
                     <a href="https://matrixcalc.org/vi/" target="_blank" class="btn btn-primary rounded-pill px-4 mt-auto">
                         Mở Máy tính Ma trận <i class="bi bi-box-arrow-up-right ms-2"></i>
@@ -535,9 +535,9 @@ function renderReferenceMaterials() {
                         <i class="bi bi-file-earmark-pdf text-primary fs-1"></i>
                     </div>
                     <span class="badge bg-secondary bg-opacity-25 text-muted mb-2">${file.type}</span>
-                    <h5 class="text-white mb-3">${file.name}</h5>
+                    <h5 class="fw-bold mb-3">${file.name}</h5>
                     <div class="mt-auto d-flex gap-2 w-100">
-                        <a href="thamkhao/${file.filename}" target="_blank" class="btn btn-outline-light rounded-pill flex-grow-1 small py-2">
+                        <a href="thamkhao/${file.filename}" target="_blank" class="btn btn-glass rounded-pill flex-grow-1 small py-2">
                             <i class="bi bi-eye me-1"></i> Xem
                         </a>
                         <a href="thamkhao/${file.filename}" download class="btn btn-primary rounded-pill flex-grow-1 small py-2 shadow-sm" style="background: linear-gradient(45deg, #4f46e5, #9333ea); border: none;">
