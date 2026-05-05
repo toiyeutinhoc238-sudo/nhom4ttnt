@@ -58,9 +58,9 @@ async function init() {
     try {
         const response = await fetch('assets/data.json');
         if (!response.ok) throw new Error("Failed to fetch data");
-        
+
         state.data = await response.json();
-        
+
         // Setup Fuse.js for Fuzzy Search
         const fuseOptions = {
             keys: [
@@ -74,11 +74,11 @@ async function init() {
         state.fuse = new Fuse(state.data.topics, fuseOptions);
 
         renderFilters();
-        
+
         // Initial render: process chunks instead of whole list
         state.currentResults = state.data.topics;
         renderTopicsChunk(true);
-        
+
     } catch (error) {
         if (window.location.protocol === 'file:') {
             elements.contentArea.innerHTML = `
@@ -96,13 +96,13 @@ async function init() {
                     </div>
                 </div>
             `;
-            
+
             // Xóa loading state
             document.getElementById('loadingState')?.remove();
-            
+
             // Render Math trong thông báo lỗi
             safeRenderMath(elements.contentArea);
-            
+
         } else {
             elements.contentArea.innerHTML = `
                 <div class="alert alert-danger" role="alert">
@@ -131,7 +131,7 @@ function renderFilters() {
             const isSubActive = state.currentSubject === item.id;
             const showClass = isSubActive ? 'show' : '';
             const downIcon = `<i class="bi bi-chevron-down small text-muted"></i>`;
-            
+
             let chaptersHtml = `
                 <button class="filter-btn w-100 text-start ps-4 mb-1 border-0 bg-transparent ${isSubActive && state.currentChapter === null ? 'text-primary fw-bold' : 'text-muted'}" style="${isSubActive && state.currentChapter === null ? 'border-left: 2px solid var(--bs-primary) !important;' : ''}" data-type="currentSubject" data-id="${item.id}" ${isMobile ? 'data-bs-dismiss="offcanvas"' : ''}>
                     Chung (${item.name})
@@ -147,7 +147,7 @@ function renderFilters() {
                     `;
                 });
             }
-            
+
             html += `
                 <div class="accordion-item bg-transparent border-0 mb-2">
                     <h2 class="accordion-header m-0 p-0">
@@ -185,7 +185,7 @@ function renderFilters() {
 
     renderSubjectButtons(state.data.subjects, elements.subjectFilters, false);
     renderCategoryButtons(state.data.categories, elements.categoryFilters, 'currentCategory', false);
-    
+
     // Clone for mobile offcanvas
     renderSubjectButtons(state.data.subjects, elements.mobileSubjectFilters, true);
     renderCategoryButtons(state.data.categories, elements.mobileCategoryFilters, 'currentCategory', true);
@@ -203,13 +203,13 @@ function renderFilters() {
  */
 function safeRenderMath(element) {
     if (!element || !window.renderMathInElement) return;
-    
+
     renderMathInElement(element, {
         delimiters: [
-            {left: '$$', right: '$$', display: true},
-            {left: '$', right: '$', display: false},
-            {left: '\\(', right: '\\)', display: false},
-            {left: '\\[', right: '\\]', display: true}
+            { left: '$$', right: '$$', display: true },
+            { left: '$', right: '$', display: false },
+            { left: '\\(', right: '\\)', display: false },
+            { left: '\\[', right: '\\]', display: true }
         ],
         ignoredTags: ["script", "noscript", "style", "textarea", "pre", "code", "option"],
         ignoredClasses: ["katex"], // Critical: prevents re-rendering already rendered math
@@ -247,30 +247,30 @@ function renderTopicsChunk(isNew = false) {
         const topic = topicObj.item ? topicObj.item : topicObj;
         const subject = state.data.subjects.find(s => s.id === topic.subject_id);
         const category = state.data.categories.find(c => c.id === topic.category_id);
-        
+
         // Robust LaTeX heading replacement that handles nested braces
         const replaceLatexHeading = (text, command) => {
             let result = text;
             const cmd = `\\\\${command}\\*?\\{`;
             const regex = new RegExp(cmd, 'g');
             let match;
-            
+
             while ((match = regex.exec(result)) !== null) {
                 let start = match.index;
                 let braceStart = start + match[0].length - 1;
                 let braceCount = 0;
                 let braceEnd = -1;
-                
+
                 for (let i = braceStart; i < result.length; i++) {
                     if (result[i] === '{') braceCount++;
                     else if (result[i] === '}') braceCount--;
-                    
+
                     if (braceCount === 0) {
                         braceEnd = i;
                         break;
                     }
                 }
-                
+
                 if (braceEnd !== -1) {
                     const content = result.substring(braceStart + 1, braceEnd);
                     const tag = command === 'section' ? 'h3' : (command === 'subsection' ? 'h4' : 'h5');
@@ -296,7 +296,7 @@ function renderTopicsChunk(isNew = false) {
         cleanContent = replaceLatexHeading(cleanContent, 'section');
         cleanContent = replaceLatexHeading(cleanContent, 'subsection');
         cleanContent = replaceLatexHeading(cleanContent, 'subsubsection');
-        
+
         cleanContent = cleanContent.trim();
         const tagsHtml = topic.tags.map(tag => `<span class="tag-badge">#${tag}</span>`).join(' ');
 
@@ -304,15 +304,15 @@ function renderTopicsChunk(isNew = false) {
         if (topic.related_ids && topic.related_ids.length > 0) {
             const relatedLinks = topic.related_ids.map(rId => {
                 const rTopic = state.data.topics.find(t => t.id === rId);
-                if(rTopic) {
+                if (rTopic) {
                     return `<a href="#" class="related-link" data-action="view-topic" data-target="${rId}">
                                 <i class="bi bi-link-45deg"></i> ${rTopic.title}
                             </a>`;
                 }
                 return '';
             }).join('');
-            
-            if(relatedLinks) {
+
+            if (relatedLinks) {
                 relatedHtml = `
                     <div class="related-section mt-4">
                         <h6 class="text-muted mb-3"><i class="bi bi-diagram-3"></i> Kiến thức liên quan</h6>
@@ -338,6 +338,13 @@ function renderTopicsChunk(isNew = false) {
                     ${tagsHtml}
                 </div>
                 ${relatedHtml}
+                ${state.currentResults.length === 1 ? `
+                    <div class="mt-4 pt-3 border-top border-secondary border-opacity-25">
+                        <button class="btn btn-glass rounded-pill px-4" onclick="history.back()">
+                            <i class="bi bi-arrow-left me-2"></i> Quay lại
+                        </button>
+                    </div>
+                ` : ''}
             </article>
         `;
     });
@@ -366,7 +373,7 @@ function renderTopicsChunk(isNew = false) {
     }
 }
 
-window.loadMoreTopics = function() {
+window.loadMoreTopics = function () {
     renderTopicsChunk(false);
 };
 
@@ -390,7 +397,7 @@ function applyFiltersAndSearch() {
     if (state.searchQuery.trim() !== '') {
         const searchResults = state.fuse.search(state.searchQuery);
         results = searchResults.map(res => res.item);
-        
+
         elements.searchStatusArea.classList.remove('d-none');
         elements.searchStatusText.innerHTML = `Kết quả cho "<span class="text-primary fw-bold">${state.searchQuery}</span>"`;
         elements.searchResultCount.textContent = `${results.length} kết quả`;
@@ -420,7 +427,7 @@ function applyFiltersAndSearch() {
 
     state.currentResults = results;
     renderTopicsChunk(true);
-    renderFilters(); 
+    renderFilters();
 }
 
 function updateBreadcrumb() {
@@ -442,15 +449,15 @@ function updateBreadcrumb() {
         return;
     }
 
-    if(state.currentSubject && state.currentSubject !== 'all') {
+    if (state.currentSubject && state.currentSubject !== 'all') {
         const subject = state.data.subjects.find(s => s.id === state.currentSubject);
         if (!subject) {
             elements.subjectBreadcrumb.classList.add('d-none');
             return;
         }
-        
+
         let html = `<a href="#" class="breadcrumb-link text-decoration-none text-muted" data-type="currentSubject" data-id="${subject.id}">${subject.name}</a>`;
-        
+
         if (state.currentChapter) {
             const chap = subject.chapters.find(c => c.id === state.currentChapter);
             if (chap) {
@@ -466,7 +473,7 @@ function updateBreadcrumb() {
 }
 
 // Clear Filters
-window.clearFilters = function() {
+window.clearFilters = function () {
     state.currentSubject = null;
     state.currentChapter = null;
     state.currentCategory = null;
@@ -495,7 +502,7 @@ function renderMathTools(toolId) {
     const container = document.createElement('div');
     container.className = 'tool-container fade-in position-relative';
     container.setAttribute('data-tool-id', 'solver');
-    
+
     container.innerHTML = `
         <div class="tool-badge">Professional Suite</div>
         <div class="tool-header">
@@ -549,7 +556,7 @@ function renderLearningPathUI() {
     const container = document.createElement('div');
     container.className = 'tool-container fade-in position-relative';
     container.setAttribute('data-tool-id', 'learning-path');
-    
+
     let dropdownItemsHtml = '<li><a class="dropdown-item cursor-pointer" data-value="">-- Chọn bài học --</a></li>';
     state.data.topics.forEach(t => {
         dropdownItemsHtml += `<li><a class="dropdown-item cursor-pointer" data-value="${t.id}">${t.title}</a></li>`;
@@ -602,7 +609,7 @@ function renderLearningPathUI() {
         
         <div id="bfsResultArea" class="mt-5"></div>
     `;
-    
+
     elements.contentArea.appendChild(container);
 
     // Apply KaTeX to the dropdowns
@@ -610,21 +617,21 @@ function renderLearningPathUI() {
 
     // Handle dropdown selection
     container.querySelectorAll('.dropdown-item').forEach(item => {
-        item.addEventListener('click', function(e) {
+        item.addEventListener('click', function (e) {
             e.preventDefault();
             const value = this.getAttribute('data-value');
             // get inner html to preserve katex rendering in the button
             const htmlContent = this.innerHTML;
             const dropdownToggle = this.closest('.dropdown').querySelector('.dropdown-toggle');
             const hiddenInput = this.closest('.col-md-5').querySelector('input[type="hidden"]');
-            
+
             dropdownToggle.innerHTML = htmlContent;
             hiddenInput.value = value;
             // Ensure the toggle text is also rendered if it contains LaTeX
             safeRenderMath(dropdownToggle);
         });
     });
-    
+
     document.getElementById('btnRunBFS').addEventListener('click', () => {
         const startId = document.getElementById('bfsStartNode').value;
         const targetId = document.getElementById('bfsTargetNode').value;
@@ -639,26 +646,26 @@ function renderLearningPathUI() {
 function runBFSAlgorithm(startId, targetId) {
     const resultArea = document.getElementById('bfsResultArea');
     resultArea.innerHTML = '<div class="text-center text-muted"><div class="spinner-border text-success mb-2" role="status"></div><br/>Đang tìm lộ trình học tập tối ưu...</div>';
-    
+
     setTimeout(() => {
         // Build graph adjacency list
         const graph = {};
         state.data.topics.forEach(t => {
             graph[t.id] = t.related_ids || [];
         });
-        
+
         // BFS Implementation
         const queue = [[startId]];
         const visited = new Set([startId]);
         let shortestPath = null;
-        
+
         if (startId === targetId) {
             shortestPath = [startId];
         } else {
             while (queue.length > 0) {
                 const path = queue.shift();
                 const node = path[path.length - 1];
-                
+
                 const neighbors = graph[node] || [];
                 for (let neighbor of neighbors) {
                     if (neighbor === targetId) {
@@ -673,7 +680,7 @@ function runBFSAlgorithm(startId, targetId) {
                 }
             }
         }
-        
+
         if (!shortestPath) {
             resultArea.innerHTML = `
                 <div class="alert alert-warning text-center">
@@ -683,7 +690,7 @@ function runBFSAlgorithm(startId, targetId) {
             `;
             return;
         }
-        
+
         // Render path
         let pathHtml = '<h5 class="fw-bold mb-4 text-center">Lộ trình học tập đề xuất</h5><div class="timeline-container">';
         shortestPath.forEach((nodeId, index) => {
@@ -692,31 +699,31 @@ function runBFSAlgorithm(startId, targetId) {
             const isLast = index === shortestPath.length - 1;
             const badgeClass = isFirst ? 'bg-success' : (isLast ? 'bg-primary' : 'bg-secondary');
             const badgeText = isFirst ? 'Bắt đầu' : (isLast ? 'Đích đến' : `Bước ${index}`);
-            
+
             pathHtml += `
                 <div class="d-flex align-items-center mb-3 fade-in" style="animation-delay: ${index * 0.1}s">
                     <div class="badge ${badgeClass} rounded-pill p-2 me-3" style="min-width: 80px;">${badgeText}</div>
                     <div class="topic-card flex-grow-1 p-3 m-0 border-start border-4 border-success cursor-pointer" onclick="viewTopicFromBFS('${topic.id}')">
-                        <h6 class="mb-1 text-light"><i class="bi bi-journal-text me-2"></i>${topic.title}</h6>
+                        <h6 class="mb-1 text-main"><i class="bi bi-journal-text me-2"></i>${topic.title}</h6>
                         <span class="small text-muted">Nhấn để xem chi tiết bài học</span>
                     </div>
                 </div>
             `;
-            
+
             if (!isLast) {
                 pathHtml += '<div class="text-center text-muted mb-3" style="width: 80px;"><i class="bi bi-arrow-down fs-4"></i></div>';
             }
         });
         pathHtml += '</div>';
-        
+
         resultArea.innerHTML = pathHtml;
         safeRenderMath(resultArea);
     }, 500); // add slight delay to show the AI loading effect
 }
 
-window.viewTopicFromBFS = function(topicId) {
+window.viewTopicFromBFS = function (topicId) {
     const targetTopic = state.data.topics.find(t => t.id === topicId);
-    if(targetTopic) {
+    if (targetTopic) {
         state.searchQuery = "";
         elements.searchInput.value = "";
         elements.clearSearchBtn.classList.add('d-none');
@@ -724,7 +731,7 @@ window.viewTopicFromBFS = function(topicId) {
         state.currentChapter = targetTopic.chapter_id || null;
         state.currentCategory = targetTopic.category_id;
         state.activeTool = null;
-        
+
         state.currentResults = [targetTopic];
         renderTopicsChunk(true);
         renderFilters();
@@ -740,7 +747,7 @@ function renderReferenceMaterials() {
     elements.contentArea.innerHTML = '';
     const container = document.createElement('div');
     container.className = 'tool-container fade-in';
-    
+
     let filesHtml = '';
     state.referenceFiles.forEach((file, index) => {
         filesHtml += `
@@ -792,7 +799,7 @@ function setupEventListeners() {
         elements.themeToggle.addEventListener('click', () => {
             const currentTheme = document.documentElement.getAttribute('data-bs-theme');
             const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-            
+
             document.documentElement.setAttribute('data-bs-theme', newTheme);
             localStorage.setItem('theme', newTheme);
             updateThemeIcon(newTheme);
@@ -803,7 +810,7 @@ function setupEventListeners() {
     if (elements.searchInput) {
         elements.searchInput.addEventListener('input', (e) => {
             state.searchQuery = e.target.value;
-            if(state.searchQuery.length > 0) {
+            if (state.searchQuery.length > 0) {
                 elements.clearSearchBtn?.classList.remove('d-none');
             } else {
                 elements.clearSearchBtn?.classList.add('d-none');
@@ -837,7 +844,7 @@ function setupEventListeners() {
         if (filterBtn) {
             const type = filterBtn.dataset.type;
             const id = filterBtn.dataset.id;
-            
+
             if (type) {
                 if (type === 'currentSubject') {
                     state.currentSubject = id === 'all' ? null : id;
@@ -866,7 +873,7 @@ function setupEventListeners() {
                     state.activeTool = null;
                     state.activeReference = false;
                 }
-                
+
                 // Active Class Management for non-accordion tools
                 if (type === 'tool' || type === 'reference' || id === 'all') {
                     document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
@@ -874,10 +881,10 @@ function setupEventListeners() {
                 }
 
                 // Scroll to top of results on mobile, unless it's just toggling the accordion
-                if(window.innerWidth < 992 && !filterBtn.hasAttribute('data-bs-toggle')) {
+                if (window.innerWidth < 992 && !filterBtn.hasAttribute('data-bs-toggle')) {
                     window.scrollTo({ top: 0, behavior: 'smooth' });
                 }
-                
+
                 applyFiltersAndSearch();
             }
         }
@@ -888,15 +895,15 @@ function setupEventListeners() {
             e.preventDefault();
             clearFilters();
         }
-        
+
         // Related Links logic
         const relatedLink = e.target.closest('[data-action="view-topic"]');
         if (relatedLink) {
             e.preventDefault();
             const targetId = relatedLink.dataset.target;
             const targetTopic = state.data.topics.find(t => t.id === targetId);
-            
-            if(targetTopic) {
+
+            if (targetTopic) {
                 // Temporarily filter to show ONLY this specific topic
                 state.searchQuery = "";
                 elements.searchInput.value = "";
@@ -904,7 +911,7 @@ function setupEventListeners() {
                 state.currentSubject = targetTopic.subject_id;
                 state.currentChapter = targetTopic.chapter_id || null;
                 state.currentCategory = targetTopic.category_id;
-                
+
                 // Directly render just this topic to stand out
                 state.currentResults = [targetTopic];
                 renderTopicsChunk(true);
@@ -945,6 +952,108 @@ function updateThemeIcon(theme) {
         icon.className = 'bi bi-sun-fill';
     }
 }
+
+// History Management
+function pushStateToHistory() {
+    const historyState = {
+        currentSubject: state.currentSubject,
+        currentChapter: state.currentChapter,
+        currentCategory: state.currentCategory,
+        activeTool: state.activeTool,
+        activeReference: state.activeReference,
+        searchQuery: state.searchQuery,
+        currentResultsIds: state.currentResults.map(r => r.id || r.item?.id),
+        bfsStartNode: document.getElementById('bfsStartNode')?.value,
+        bfsTargetNode: document.getElementById('bfsTargetNode')?.value
+    };
+    history.pushState(historyState, "", "");
+}
+
+window.onpopstate = function (event) {
+    if (event.state) {
+        state.currentSubject = event.state.currentSubject;
+        state.currentChapter = event.state.currentChapter;
+        state.currentCategory = event.state.currentCategory;
+        state.activeTool = event.state.activeTool;
+        state.activeReference = event.state.activeReference;
+        state.searchQuery = event.state.searchQuery;
+
+        if (elements.searchInput) elements.searchInput.value = state.searchQuery;
+
+        // If it was a single topic view from BFS, we might need to restore that
+        if (event.state.currentResultsIds && event.state.currentResultsIds.length === 1 && !state.activeTool && !state.activeReference) {
+            const topic = state.data.topics.find(t => t.id === event.state.currentResultsIds[0]);
+            if (topic) {
+                state.currentResults = [topic];
+                renderTopicsChunk(true);
+                renderFilters();
+                updateBreadcrumb();
+                return;
+            }
+        }
+
+        applyFiltersAndSearch(false);
+
+        // Restore BFS results if they were active
+        if (state.activeTool === 'learning-path' && event.state.bfsStartNode && event.state.bfsTargetNode) {
+            setTimeout(() => {
+                const startBtn = document.getElementById('btnBfsStartNode');
+                const targetBtn = document.getElementById('btnBfsTargetNode');
+                const startInput = document.getElementById('bfsStartNode');
+                const targetInput = document.getElementById('bfsTargetNode');
+
+                if (startBtn && targetBtn && startInput && targetInput) {
+                    startInput.value = event.state.bfsStartNode;
+                    targetInput.value = event.state.bfsTargetNode;
+
+                    const startTopic = state.data.topics.find(t => t.id === event.state.bfsStartNode);
+                    const targetTopic = state.data.topics.find(t => t.id === event.state.bfsTargetNode);
+
+                    if (startTopic) startBtn.innerHTML = startTopic.title;
+                    if (targetTopic) targetBtn.innerHTML = targetTopic.title;
+
+                    runBFSAlgorithm(event.state.bfsStartNode, event.state.bfsTargetNode);
+                }
+            }, 100);
+        }
+    } else {
+        // Initial state or root
+        state.currentSubject = null;
+        state.currentChapter = null;
+        state.currentCategory = null;
+        state.activeTool = null;
+        state.activeReference = false;
+        state.searchQuery = "";
+        if (elements.searchInput) elements.searchInput.value = "";
+        applyFiltersAndSearch(false);
+    }
+};
+
+// Update existing functions to use history
+const originalApplyFilters = applyFiltersAndSearch;
+applyFiltersAndSearch = function (shouldPushState = true) {
+    originalApplyFilters();
+    if (shouldPushState) pushStateToHistory();
+};
+
+const originalViewTopicFromBFS = viewTopicFromBFS;
+window.viewTopicFromBFS = function (topicId) {
+    originalViewTopicFromBFS(topicId);
+    pushStateToHistory();
+};
+
+const originalClearFilters = clearFilters;
+window.clearFilters = function (shouldPushState = true) {
+    state.currentSubject = null;
+    state.currentChapter = null;
+    state.currentCategory = null;
+    state.activeTool = null;
+    state.activeReference = false;
+    state.searchQuery = "";
+    elements.searchInput.value = "";
+    elements.clearSearchBtn.classList.add('d-none');
+    applyFiltersAndSearch(shouldPushState);
+};
 
 // Boot application
 document.addEventListener('DOMContentLoaded', init);

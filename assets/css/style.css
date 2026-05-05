@@ -165,7 +165,7 @@ body {
     z-index: 10;
 }
 #clearSearchBtn:hover {
-    color: white;
+    color: var(--primary-color);
 }
 
 /* Sidebar & Filters */
