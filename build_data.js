@@ -209,8 +209,35 @@ chapters.forEach(i => {
         let categoryId = 'concept';
         
         if (nearest.type === 'tcolorbox') {
-            let titleMatch = nearest.match[0].match(/title=\{([^}]*)\}/);
-            title = (titleMatch && titleMatch[1].trim()) || "Kiến thức trọng tâm";
+            // Robust title extraction to handle nested braces like title={Ma trận $A^{-1}$}
+            title = "Kiến thức trọng tâm";
+            let startOfTitle = nearest.match[0].indexOf('title={');
+            if (startOfTitle !== -1) {
+                let i = startOfTitle + 7;
+                let braceCount = 1;
+                let titleStart = i;
+                let matchStr = nearest.match[0];
+                while (i < matchStr.length && braceCount > 0) {
+                    if (matchStr[i] === '{') braceCount++;
+                    else if (matchStr[i] === '}') braceCount--;
+                    i++;
+                }
+                if (braceCount === 0) {
+                    title = matchStr.slice(titleStart, i - 1).trim();
+                } else {
+                    // Title spans beyond the match[0], we need to find it in the content
+                    let fullContentFromTitle = content.substring(nearest.match.index + startOfTitle + 7);
+                    let j = 0;
+                    let bCount = 1;
+                    while (j < fullContentFromTitle.length && bCount > 0) {
+                        if (fullContentFromTitle[j] === '{') bCount++;
+                        else if (fullContentFromTitle[j] === '}') bCount--;
+                        j++;
+                    }
+                    title = fullContentFromTitle.slice(0, j - 1).trim();
+                }
+            }
+            
             const endMatch = /\\end\{tcolorbox\}/g;
             endMatch.lastIndex = blockStart;
             const end = endMatch.exec(content);
@@ -276,17 +303,30 @@ chapters.forEach(i => {
         let cleanedBody = cleanLatexBody(rawBody);
         
         if (cleanedBody && cleanedBody.length > 0) {
-            newTopics.push({
-                id: `auto-${topicIdCounter++}`,
-                subject_id: subjectMap[i] || 'other',
-                chapter_id: `ch${i}`,
-                category_id: categoryId,
-                title: title + ` (Chương ${i})`,
-                content: cleanedBody,
-                tags: [title.toLowerCase()],
-                related_ids: []
-            });
-            count++;
+            if (nearest.type === 'example' && newTopics.length > 0 && newTopics[newTopics.length - 1].chapter_id === `ch${i}`) {
+                let lastTopic = newTopics[newTopics.length - 1];
+                if (lastTopic.exampleCount === undefined) lastTopic.exampleCount = 0;
+                lastTopic.exampleCount++;
+                
+                let marker = `__EXAMPLE_TITLE_${lastTopic.exampleCount}__`;
+                lastTopic.content += `\n<div class="mt-4 p-4 bg-secondary bg-opacity-10 rounded border-start border-4 border-info shadow-sm"><h6 class="fw-bold text-info mb-3"><i class="bi bi-lightbulb me-2"></i>${marker}</h6>\n${cleanedBody}\n</div>`;
+                if (!lastTopic.tags.includes('ví dụ minh họa')) {
+                    lastTopic.tags.push('ví dụ minh họa');
+                }
+            } else {
+                newTopics.push({
+                    id: `auto-${topicIdCounter++}`,
+                    subject_id: subjectMap[i] || 'other',
+                    chapter_id: `ch${i}`,
+                    category_id: categoryId,
+                    title: title + ` (Chương ${i})`,
+                    content: nearest.type === 'example' ? `<div class="mt-4 p-4 bg-secondary bg-opacity-10 rounded border-start border-4 border-info shadow-sm"><h6 class="fw-bold text-info mb-3"><i class="bi bi-lightbulb me-2"></i>__EXAMPLE_TITLE_1__</h6>\n${cleanedBody}\n</div>` : cleanedBody,
+                    tags: [title.toLowerCase()],
+                    related_ids: [],
+                    exampleCount: nearest.type === 'example' ? 1 : 0
+                });
+                count++;
+            }
         }
     }
     
@@ -330,6 +370,90 @@ chapters.forEach(i => {
     console.log(` -> Found ${count} blocks, added 1 PDF attachment for chapter ${i}.`);
 });
 
+// Build Knowledge Graph edges (related_ids)
+console.log('Building Knowledge Graph edges...');
+for (let i = 0; i < newTopics.length; i++) {
+    const current = newTopics[i];
+    const relatedSet = new Set(current.related_ids || []);
+    
+    // 1. Sequential edges: bidirectional link to next/prev topic in the same chapter
+    if (i < newTopics.length - 1 && newTopics[i+1].chapter_id === current.chapter_id) {
+        relatedSet.add(newTopics[i+1].id);
+        if (!newTopics[i+1].related_ids) newTopics[i+1].related_ids = [];
+        newTopics[i+1].related_ids.push(current.id);
+    }
+    
+    // 2. Semantic edges: link topics with shared keywords
+    const significantWords = current.title.toLowerCase()
+        .replace(/[^a-z0-9áàảãạăắằẳẵặâấầẩẫậéèẻẽẹêếềểễệíìỉĩịóòỏõọôốồổỗộơớờởỡợúùủũụưứừửữựýỳỷỹỵđ]/g, ' ')
+        .split(/\\s+/)
+        .filter(w => w.length > 3 && !['chương', 'bài', 'tập', 'ví', 'dụ', 'tổng', 'hợp', 'tính', 'chất', 'định', 'lý', 'minh', 'họa', 'bảng', 'tóm', 'tắt'].includes(w));
+        
+    for (let j = 0; j < newTopics.length; j++) {
+        if (i !== j) {
+            const other = newTopics[j];
+            const otherTitle = other.title.toLowerCase();
+            const hasSharedWord = significantWords.some(w => otherTitle.includes(w));
+            if (hasSharedWord && relatedSet.size < 4) { // keep standard semantic edges low
+                relatedSet.add(other.id);
+            }
+        }
+    }
+
+    // 3. Expert Knowledge Edges (Mathematical dependencies)
+    const expertRules = [
+        { keywords: ['không gian', 'độc lập', 'phụ thuộc', 'cơ sở', 'chiều', 'hạng', 'vector'], 
+          targets: ['định thức', 'biến đổi', 'sơ cấp', 'hệ phương trình'] },
+        { keywords: ['nghịch đảo'], 
+          targets: ['định thức', 'biến đổi'] },
+        { keywords: ['trị riêng', 'vector riêng', 'chéo hóa'], 
+          targets: ['định thức', 'hệ phương trình'] },
+        { keywords: ['tích phân'], 
+          targets: ['đạo hàm', 'giới hạn'] },
+        { keywords: ['đạo hàm', 'vi phân'], 
+          targets: ['giới hạn'] },
+        { keywords: ['chuỗi'], 
+          targets: ['giới hạn', 'đạo hàm'] }
+    ];
+    
+    const titleLower = current.title.toLowerCase();
+    for (const rule of expertRules) {
+        if (rule.keywords.some(k => titleLower.includes(k))) {
+            for (let j = 0; j < newTopics.length; j++) {
+                if (i !== j) {
+                    const otherTitle = newTopics[j].title.toLowerCase();
+                    if (rule.targets.some(t => otherTitle.includes(t)) && relatedSet.size < 10) {
+                        relatedSet.add(newTopics[j].id);
+                        // Make expert edges bidirectional so pathfinding is fully connected
+                        if (!newTopics[j].related_ids) newTopics[j].related_ids = [];
+                        newTopics[j].related_ids.push(current.id);
+                    }
+                }
+            }
+        }
+    }
+    
+    current.related_ids = Array.from(relatedSet);
+}
+
+// 4. Post-process Example Titles
+for (let i = 0; i < newTopics.length; i++) {
+    let current = newTopics[i];
+    if (current.exampleCount !== undefined && current.exampleCount > 0) {
+        if (current.exampleCount === 1) {
+            // If only 1 example, don't number it
+            current.content = current.content.replace(/__EXAMPLE_TITLE_1__/g, 'Ví dụ minh họa');
+        } else {
+            // If > 1, number them
+            for (let e = 1; e <= current.exampleCount; e++) {
+                let re = new RegExp(`__EXAMPLE_TITLE_${e}__`, 'g');
+                current.content = current.content.replace(re, `Ví dụ minh họa ${e}`);
+            }
+        }
+    }
+    delete current.exampleCount;
+}
+
 data.topics = newTopics;
 
 data.subjects = [
@@ -351,4 +475,4 @@ data.subjects = [
 ];
 
 fs.writeFileSync(dstFile, JSON.stringify(data, null, 2));
-console.log(`\nSuccessfully added ${newTopics.length} new topics from LaTeX source to data.json`);
+console.log(`\\nSuccessfully added ${newTopics.length} new topics from LaTeX source to data.json`);

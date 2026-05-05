@@ -1,0 +1,253 @@
+
+
+CHƯƠNG 1. GIỚI THIỆU CHUNG
+1.1. Lý do chọn đề tài 
+Trong chương trình đào tạo ngành Công nghệ thông tin, học phần Cơ sở Toán học cho CNTT đóng vai trò nền tảng, cung cấp các kiến thức thiết yếu phục vụ cho các lĩnh vực chuyên sâu như Trí tuệ nhân tạo, Xử lý hình ảnh và Khoa học dữ liệu  CITATION Ken12 \l 1033 [1],  CITATION Eri10 \l 1033 [2]. 
+Tuy nhiên, trong quá trình học tập, sinh viên thường gặp phải một số khó khăn sau:
+Thứ nhất, khối lượng kiến thức của học phần lớn và có tính trừu tượng cao. Nội dung trải dài từ Giải tích (giới hạn, vi phân, tích phân, chuỗi) đến Đại số tuyến tính (ma trận, định thức, không gian vector, ánh xạ tuyến tính), kèm theo nhiều công thức và quy trình tính toán phức tạp. Điều này gây khó khăn trong việc ghi nhớ, hệ thống hóa và vận dụng kiến thức  CITATION Ken12 \l 1033 [1], CITATION Yan20 \l 1033 [3].
+Thứ hai, phương pháp tra cứu tài liệu hiện nay còn nhiều hạn chế. Phần lớn tài liệu tồn tại dưới dạng file PDF hoặc giáo trình in, khiến việc tìm kiếm thông tin mất nhiều thời gian và thiếu linh hoạt, đặc biệt khi người học không nhớ chính xác thuật ngữ cần tra cứu CITATION Nog02 \l 1033 [4].
+Thứ ba, các công cụ hỗ trợ tra cứu kiến thức toán học trên nền tảng web hiện nay chưa đáp ứng tốt nhu cầu học tập. Việc hiển thị công thức toán học và hình minh họa đôi khi chưa trực quan hoặc thiếu tính tương tác, làm giảm hiệu quả tiếp thu của người học CITATION Kha23 \l 1033 [5].
+Xuất phát từ những vấn đề trên, nhóm nhận thấy cần có một giải pháp hỗ trợ tra cứu kiến thức nhanh chóng, chính xác và trực quan hơn. Đồng thời, đây cũng là cơ hội để vận dụng các kiến thức và kỹ thuật trong lĩnh vực Công nghệ thông tin nhằm xây dựng một hệ thống hỗ trợ học tập thực tiễn.
+Vì vậy, nhóm quyết định thực hiện đề tài: “Xây dựng hệ thống tra cứu kiến thức môn Cơ sở Toán trong Công nghệ thông tin”, với mục tiêu tạo ra một công cụ hỗ trợ sinh viên trong việc hệ thống hóa và truy xuất kiến thức một cách hiệu quả.
+
+1.2. Mục tiêu đồ án (Xây dựng hệ thống tra cứu tri thức thông minh) 
+Mục tiêu của đồ án là xây dựng một hệ thống tra cứu tri thức mang tên MathBase, nhằm hỗ trợ sinh viên ngành Công nghệ thông tin trong việc hệ thống hóa và truy xuất nhanh chóng các kiến thức thuộc học phần Cơ sở Toán học cho CNTT.
+Để đạt được mục tiêu tổng quát này, đồ án hướng đến các mục tiêu cụ thể sau:
+Xây dựng chức năng tìm kiếm hiệu quả: Phát triển cơ chế tìm kiếm cho phép người dùng tra cứu nhanh chóng các khái niệm, định nghĩa, định lý và ví dụ toán học, kể cả trong trường hợp nhập từ khóa không đầy đủ hoặc không chính xác.
+Tổ chức và quản lý dữ liệu tri thức có cấu trúc: Xây dựng hệ thống lưu trữ và tổ chức nội dung học tập theo cấu trúc rõ ràng, giúp người dùng dễ dàng tiếp cận và theo dõi mạch kiến thức.
+Đảm bảo hiển thị nội dung toán học chính xác và trực quan: Thiết kế hệ thống có khả năng hiển thị các công thức và hình minh họa một cách rõ ràng, hỗ trợ người học trong việc hiểu và tiếp cận các khái niệm trừu tượng.
+Nâng cao trải nghiệm người dùng: Xây dựng giao diện thân thiện, dễ sử dụng, hỗ trợ tra cứu nhanh và phù hợp với nhiều thiết bị khác nhau, từ đó cải thiện hiệu quả học tập của người dùng.
+Số hóa và tích hợp nội dung học phần: Tổng hợp và số hóa các kiến thức trọng tâm của học phần Cơ sở Toán học cho CNTT, tạo thành một nguồn tài nguyên học tập tập trung, thuận tiện cho việc tra cứu và ôn tập.
+1.3. Ý nghĩa thực tiễn và đối tượng sử dụng
+1.3.1. Ý nghĩa thực tiễn
+Việc xây dựng hệ thống MathBase không chỉ dừng lại ở việc lưu trữ dữ liệu mà còn mang lại nhiều giá trị thiết thực trong học tập và ứng dụng công nghệ:
+Thứ nhất, hệ thống góp phần hệ thống hóa kiến thức của học phần Cơ sở Toán học cho CNTT. Thay vì tồn tại dưới dạng các tài liệu rời rạc, nội dung học tập được tổ chức lại theo cấu trúc rõ ràng, giúp người học dễ dàng theo dõi và nắm bắt mạch kiến thức.
+Thứ hai, hệ thống giúp nâng cao hiệu quả tra cứu. Người dùng có thể nhanh chóng tìm kiếm các định nghĩa, định lý hoặc ví dụ thông qua từ khóa, thay vì phải tìm kiếm thủ công trong các tài liệu dài. Điều này góp phần tiết kiệm thời gian và hỗ trợ quá trình học tập hiệu quả hơn.
+Thứ ba, hệ thống cải thiện khả năng tiếp cận các nội dung toán học. Các công thức và hình minh họa được trình bày rõ ràng, góp phần hỗ trợ người học trong việc hiểu các khái niệm trừu tượng.
+Thứ tư, đề tài thể hiện khả năng ứng dụng các kiến thức và kỹ thuật trong lĩnh vực Công nghệ thông tin vào giải quyết một bài toán thực tiễn trong giáo dục, từ đó góp phần nâng cao kỹ năng xây dựng hệ thống và phát triển sản phẩm của sinh viên.
+1.3.2. Đối tượng sử dụng
+Hệ thống được thiết kế nhằm phục vụ nhiều nhóm người dùng trong môi trường học tập và nghiên cứu, bao gồm:
+Sinh viên ngành Công nghệ thông tin: Đây là đối tượng chính của hệ thống, đặc biệt là những sinh viên đang học hoặc cần ôn tập học phần Cơ sở Toán học cho CNTT.
+Giảng viên và người hướng dẫn: Hệ thống hỗ trợ trong việc tra cứu nhanh các nội dung cần thiết, phục vụ cho quá trình giảng dạy và hướng dẫn sinh viên.
+Người tự học và nghiên cứu: Những người có nhu cầu tìm hiểu hoặc ôn tập các kiến thức toán học nền tảng có thể sử dụng hệ thống như một công cụ hỗ trợ tra cứu thuận tiện.
+1.4. Phạm vi đề tài
+Đề tài tập trung xây dựng hệ thống tra cứu kiến thức phục vụ cho học phần Cơ sở Toán học cho Công nghệ thông tin. Phạm vi của hệ thống được xác định như sau:
+Về nội dung, hệ thống chỉ bao gồm các kiến thức trọng tâm thuộc hai mảng chính là Giải tích và Đại số tuyến tính, bao gồm các khái niệm, định nghĩa, định lý, ví dụ và một số quy trình giải toán cơ bản. Các nội dung ngoài phạm vi học phần không được đề cập trong hệ thống.
+Về chức năng, hệ thống hỗ trợ tra cứu thông tin, tìm kiếm theo từ khóa và hiển thị nội dung toán học dưới dạng trực quan. Hệ thống không tập trung vào việc giải toán tự động hay xây dựng các mô hình trí tuệ nhân tạo phức tạp.
+Về dữ liệu, nguồn dữ liệu được sử dụng chủ yếu từ giáo trình, tài liệu học tập và slide bài giảng của học phần. Dữ liệu được chọn lọc và tổ chức lại nhằm phục vụ mục đích tra cứu và học tập.
+Về phạm vi triển khai, hệ thống được xây dựng dưới dạng một nền tảng web phục vụ mục đích học tập và thử nghiệm, chưa hướng đến triển khai ở quy mô thương mại hoặc tích hợp vào các hệ thống đào tạo chính thức.
+
+CHƯƠNG 2: CƠ SỞ LÝ THUYẾT
+2.1. Tổng quan về bài toán tìm kiếm tri thức (Knowledge Retrieval)
+Tìm kiếm tri thức là một phân nhánh quan trọng thuộc lĩnh vực Trí tuệ nhân tạo và Khoa học thông tin. Khác với các công cụ tìm kiếm tài liệu truyền thống chỉ đơn thuần quét và trả về văn bản, mục tiêu của tìm kiếm tri thức là xác định, truy xuất và trích xuất những thông tin đã được cấu trúc hóa để đáp ứng chính xác nhu cầu nhận thức của con người.
+Để hiểu rõ hơn về giá trị của hệ thống này, cần phân biệt rõ ba cấp độ tìm kiếm trong khoa học máy tính. Ở mức độ cơ bản nhất, Tìm kiếm dữ liệu hoạt động dựa trên nguyên lý khớp từ khóa một cách tuyệt đối thông qua logic suy diễn. Nâng cao hơn là Tìm kiếm thông tin, cho phép đối sánh dựa trên ngữ nghĩa bề mặt hoặc từ khóa mở rộng, nhưng hệ thống vẫn chưa thực sự "hiểu" nội dung. Tìm kiếm tri thức nằm ở cấp độ cao nhất, vận dụng ngữ cảnh, khả năng suy luận và các mô hình biểu diễn dữ liệu (như hệ thống bản thể học hay đồ thị tri thức) để đưa ra câu trả lời thông minh và sát với ý định của người dùng nhất.
+Hiện nay, kiến trúc của các hệ thống tìm kiếm tri thức đang được hiện đại hóa thông qua các kỹ thuật trí tuệ nhân tạo tiên tiến. Thay vì chỉ đếm tần suất xuất hiện của từ khóa, hệ thống sử dụng truy xuất ngữ nghĩa thông qua các mô hình vector nhúng để thấu hiểu ý định truy vấn. Quá trình này thường được kết hợp với phương pháp RAG để tạo ra các phản hồi ngôn ngữ tự nhiên, đồng thời khắc phục triệt để hiện tượng "ảo giác" thường gặp ở các mô hình ngôn ngữ lớn. Dữ liệu được quản lý thông qua các Cơ sở dữ liệu Vector (như FAISS, Pinecone) hoặc Đồ thị tri thức nhằm ánh xạ các mối quan hệ phức tạp mà kỹ thuật tìm kiếm truyền thống không thể phát hiện.
+Về mặt kiến trúc hệ thống, một quy trình tìm kiếm tri thức hoàn chỉnh diễn ra qua bốn pha. Đầu tiên, kho tri thức được xây dựng thông qua việc thu thập và chuẩn hóa các nguồn dữ liệu đa định dạng. Tiếp theo là bước tiền xử lý, nơi văn bản được chia nhỏ và chuyển đổi thành các vector toán học. Khi có truy vấn từ người dùng, câu hỏi cũng được nhúng vào cùng một không gian vector để hệ thống đối sánh độ tương đồng. Cuối cùng, thuật toán sẽ xếp hạng và trích xuất các phân đoạn chứa lượng thông tin liên quan nhất để kết xuất ra màn hình. Mặc dù mang lại nhiều ứng dụng thực tiễn lớn như quản trị tri thức doanh nghiệp hay xây dựng hệ thống giáo dục điện tử, bài toán tìm kiếm tri thức vẫn đang phải giải quyết các thách thức hóc búa về việc tối ưu tốc độ xử lý hàng tỷ vector trong thời gian thực và đảm bảo tính cập nhật liên tục của dữ liệu.
+2.2. Các thuật toán tìm kiếm và xử lý văn bản hiện hữu
+Trong các hệ thống tìm kiếm hiện đại, việc tối ưu hóa thuật toán đối sánh văn bản đóng vai trò cốt lõi trong việc nâng cao trải nghiệm người dùng, đặc biệt là khi tích hợp với các hệ thống xử lý ngôn ngữ tự nhiên.
+Một trong những giải pháp nổi bật nhất là kỹ thuật Tìm kiếm mờ hay còn gọi là tìm kiếm xấp xỉ. Khác với truy vấn cơ sở dữ liệu truyền thống đòi hỏi sự chính xác tuyệt đối, tìm kiếm mờ có khả năng dung sai với các lỗi đánh máy, lỗi thiếu ký tự hoặc sai trật tự từ. Thay vì so khớp từng ký tự, thuật toán đo lường khoảng cách thuật toán giữa chuỗi truy vấn và dữ liệu gốc. Việc áp dụng cơ chế này không chỉ giúp hệ thống trở nên linh hoạt hơn, đưa ra các gợi ý tự động thông minh, mà còn hỗ trợ quá trình làm sạch và hợp nhất các bộ dữ liệu lớn nhờ khả năng nhận diện các biến thể từ vựng.
+Trái tim của cơ chế tìm kiếm xấp xỉ thường là thuật toán Bitap (còn được biết đến với tên gọi Baeza-Yates-Gonnet). Đây là một thuật toán dựa trên các phép toán mức bit (như AND, OR, NOT, SHIFT) để duy trì và cập nhật trạng thái tìm kiếm. Thuật toán này hoạt động với tốc độ chớp nhoáng trên các mẫu từ khóa có độ dài nhỏ hơn kích thước thanh ghi của bộ vi xử lý, đồng thời cho phép lập trình viên định nghĩa trước ngưỡng sai số tối đa (số lần chèn, xóa, thay thế ký tự). Nhờ tiêu tốn cực ít dung lượng bộ nhớ, Bitap là lựa chọn lý tưởng cho các tác vụ cần tốc độ phản hồi thời gian thực.
+Để Bitap hoặc các thuật toán tìm kiếm mờ có thể đánh giá được mức độ khớp, chúng cần một thang đo toán học, tiêu biểu nhất là Khoảng cách Levenshtein. Khoảng cách này được định nghĩa là số lượng thao tác tối thiểu (bao gồm chèn, xóa hoặc thay thế một ký tự) cần thực hiện để biến đổi chuỗi nguồn thành chuỗi đích. Về mặt toán học, nếu khoảng cách bằng 0, hai chuỗi hoàn toàn trùng khớp; khoảng cách càng nhỏ thì độ tương đồng càng cao. Thuật toán tính toán Levenshtein thường được triển khai bằng phương pháp quy hoạch động với độ phức tạp thời gian là Om × n (trong đó m và n là độ dài của hai chuỗi). Thước đo này hiện là nền tảng cho vô số ứng dụng kiểm tra lỗi chính tả và phát hiện đạo văn hiện nay.
+Bảng 2.1. Phân tích đối chiếu các thuật toán tìm kiếm và xử lý văn bản
+Thuật toán / Kỹ thuật	Mục đích cốt lõi	Cơ chế hoạt động	Thế mạnh nổi bật	Hạn chế	Ứng dụng thực tiễn
+Tìm kiếm mờ	Tìm kiếm xấp xỉ, đối sánh chuỗi không yêu cầu chính xác tuyệt đối.	Đánh giá độ tương đồng tổng thể, chấp nhận các lỗi sai sót như thiếu, thừa hoặc sai vị trí ký tự.	Tối ưu hóa trải nghiệm người dùng, tính linh hoạt cao, khả năng chịu lỗi đánh máy cực tốt.	Thường là một khái niệm bao trùm, cần kết hợp nhiều thuật toán lõi bên dưới; dễ trả về kết quả nhiễu nếu cấu hình sai ngưỡng.	Thanh tìm kiếm tự động gợi ý, chức năng tự động sửa lỗi chính tả trên các trang web.
+Thuật toán Bitap	Tìm kiếm xấp xỉ tốc độ cao chuyên biệt cho các mẫu từ khóa ngắn.	Sử dụng các phép toán mức bit (như phép và, phép hoặc, dịch bit) để mô phỏng một bộ máy trạng thái hữu hạn.	Tốc độ truy xuất chớp nhoáng, tiết kiệm tối đa tài nguyên bộ nhớ do thao tác trực tiếp ở mức phần cứng.	Độ dài từ khóa tìm kiếm bị giới hạn bởi kích thước thanh ghi của bộ vi xử lý (thường tối đa 32 hoặc 64 ký tự).	Làm engine lõi xử lý thời gian thực trong các thư viện lập trình (tiêu biểu như thư viện Fuse.js).
+Khoảng cách Levenshtein	Đo lường mức độ tương đồng hoặc khác biệt cụ thể giữa hai chuỗi văn bản.	Tính toán số bước thao tác tối thiểu (chèn, xóa, thay thế) để biến đổi chuỗi này thành chuỗi kia bằng quy hoạch động.	Độ chính xác tuyệt đối trong việc chấm điểm tương đồng, có thể áp dụng linh hoạt cho nhiều loại dữ liệu khác nhau.	Tiêu tốn nhiều tài nguyên tính toán và suy giảm tốc độ rõ rệt khi phải so sánh các đoạn văn bản quá dài.	Hệ thống kiểm tra đạo văn, đối chiếu chuỗi dữ liệu sinh học, hoặc kiểm tra chính tả chuyên sâu.
+
+2.3. Các công nghệ hỗ trợ hiển thị và tính toán
+Để xây dựng một hệ thống phần mềm giáo dục hay tài liệu kỹ thuật hoàn thiện, bên cạnh các thuật toán xử lý ngầm, việc lựa chọn công nghệ kết xuất giao diện và tính toán là yếu tố mang tính quyết định. Xu hướng công nghệ hiện nay đang chuyển dịch mạnh mẽ sang việc vận dụng tối đa sức mạnh của thiết bị người dùng nhằm giảm tải cho máy chủ.
+Trong kiến trúc của hệ thống, logic tìm kiếm được ủy thác cho thư viện Fuse.js. Đây là một thư viện tìm kiếm mờ mã nguồn mở, được phát triển hoàn toàn bằng JavaScript và tuân thủ triết lý không phụ thuộc vào bất kỳ thư viện bên thứ ba nào. Fuse.js cung cấp bộ công cụ tìm kiếm xấp xỉ cực kỳ nhạy bén cùng khả năng lọc dữ liệu logic phức tạp qua các toán tử. Điểm sáng giá nhất của thư viện này là khả năng chạy trực tiếp trên trình duyệt, biến nó thành lựa chọn hoàn hảo để tra cứu nhanh các cấu trúc dữ liệu nội bộ mà không cần phải gửi yêu cầu về hệ thống máy chủ.
+Đối với bài toán kết xuất các công thức toán học chuyên sâu, KaTeX nổi lên như một tiêu chuẩn mới. Được phát triển bởi Khan Academy, KaTeX là bộ xử lý JavaScript chuyên dụng để hiển thị các ký hiệu toán học trên nền web với hiệu năng vượt trội. Không chỉ tương thích sâu với các cú pháp mã hóa phức tạp (như ma trận, tích phân, hệ phương trình), KaTeX còn đảm bảo chất lượng hình ảnh sắc nét, không bị vỡ hạt trên các màn hình độ phân giải cao và tương thích hoàn hảo với các nền tảng lập trình giao diện hiện đại.
+Tuy nhiên, giới hạn của KaTeX là chỉ xử lý được công thức đại số chứ không thể vẽ hình học. Để giải quyết vấn đề hiển thị đồ thị không gian, hệ thống ứng dụng gói lệnh TikZ từ hệ sinh thái LaTeX. Nhờ triết lý đồ họa dựa trên mã lệnh, TikZ cho phép định nghĩa mọi đường thẳng, tọa độ và hàm số bằng độ chính xác toán học tuyệt đối. Để đưa các đồ thị này lên web, một quy trình biên dịch tự động được thiết lập: mã TikZ gốc sẽ được chuyển đổi gián tiếp (thông qua định dạng PDF hoặc EPS) thành các tệp ảnh vector chuẩn SVG. Sự kết hợp giữa tốc độ của Fuse.js, sự sắc sảo của KaTeX và độ chính xác của TikZ đã tạo nên một kiến trúc hoàn chỉnh để hiển thị và truy xuất tài liệu khoa học một cách tối ưu.
+
+2.4. Thuật toán tìm kiếm trên đồ thị và ứng dụng trong giáo dục
+Trong một hệ thống tri thức phức tạp, các khái niệm không đứng độc lập mà có mối liên kết hữu cơ với nhau (ví dụ: muốn học Tích phân cần nắm vững Đạo hàm). Để mô hình hóa và khai phá các mối quan hệ này, hệ thống sử dụng lý thuyết đồ thị, trong đó mỗi bài học là một đỉnh và các liên kết tri thức là các cạnh.
+Thuật toán Tìm kiếm theo chiều rộng (Breadth-First Search - BFS) được áp dụng để xác định con đường ngắn nhất kết nối hai khái niệm bất kỳ. BFS bắt đầu từ một đỉnh gốc và khám phá tất cả các đỉnh lân cận ở mức độ ưu tiên gần nhất trước khi tiến sang các mức xa hơn. Đặc tính này đảm bảo rằng lộ trình học tập được đề xuất luôn là lộ trình tối ưu về mặt số lượng bước trung gian, giúp người học nhanh chóng đạt được mục tiêu kiến thức mà không bị lạc giữa các thông tin không liên quan. Việc ứng dụng BFS trong giáo dục điện tử không chỉ giúp cá nhân hóa trải nghiệm học tập mà còn hỗ trợ sinh viên tự xây dựng được bản đồ kiến thức (Knowledge Map) cho riêng mình.
+
+CHƯƠNG 3. THIẾT KẾ VÀ TRIỂN KHAI HỆ THỐNG
+Chương này trình bày chi tiết về kiến trúc phần mềm, các mô hình dữ liệu cốt lõi, và những thuật toán nền tảng được áp dụng để xây dựng hệ thống tra cứu cơ sở toán học. Toàn bộ thiết kế của dự án được định hướng bởi ba tiêu chí quan trọng nhất: hiệu năng truy xuất tức thời, tính toàn vẹn của ngôn ngữ toán học, và trải nghiệm người dùng liền mạch.
+3.1. Kiến trúc tổng thể và luồng xử lý của hệ thống
+Hệ thống tra cứu cơ sở toán học được thiết kế theo kiến trúc ứng dụng web tĩnh một trang dựa trên triết lý Jamstack kết hợp với nền tảng phi máy chủ. Mục tiêu chính của thiết kế này là mang lại tốc độ truy xuất tức thời, giảm thiểu tối đa độ trễ do giao tiếp mạng, đồng thời đảm bảo khả năng triển khai linh hoạt trên bất kỳ hạ tầng lưu trữ tĩnh nào (như GitHub Pages, Vercel, Netlify) mà không đòi hỏi tài nguyên máy chủ cơ sở dữ liệu truyền thống.
+Khác với các mô hình nguyên khối trước đây nơi máy chủ phải tốn tài nguyên để tạo ra từng trang HTML, hệ thống này chuyển dịch toàn bộ gánh nặng tính toán sang thiết bị của người dùng. Điểm nhấn trong kiến trúc này là việc phân tách hoàn toàn vòng đời dữ liệu thành hai giai đoạn độc lập: pha tiền xử lý dữ liệu trước khi triển khai và pha thực thi trực tiếp trên trình duyệt.
+3.1.1. Pha tiền xử lý dữ liệu
+Trong môi trường phát triển, một quy trình tự động bóc tách và chuyển đổi dữ liệu được thiết lập thông qua kịch bản build_data.js chạy trên nền tảng Node.js. Quá trình này hoạt động gần giống như một trình biên dịch:
+Đầu vào là các tệp định dạng LaTeX nguyên thủy (chuong1.tex, chuong2.tex,...).
+Kịch bản Node.js sẽ đóng vai trò như một bộ phân tích cú pháp, quét tuần tự qua các tệp này, sử dụng các thuật toán chuyên biệt để nhận diện và bóc tách các đơn vị kiến thức có giá trị như định lý, hệ quả, ví dụ minh họa và bảng biểu.
+Các hình ảnh phức tạp (như đồ thị vẽ bằng mã lệnh TikZ) sẽ được đẩy qua một luồng xử lý phụ. Hệ thống sẽ gọi các tiến trình hệ điều hành để biên dịch gián tiếp thông qua pdflatex và chuyển đổi sang định dạng vector chuẩn SVG bằng công cụ pdftocairo nhằm đảm bảo độ sắc nét.
+Cuối cùng, toàn bộ khối tri thức sau khi được chuẩn hóa sẽ được kết xuất và đóng gói vào một tệp duy nhất là data.json. Tệp này đóng vai trò như một cơ sở dữ liệu phi cấu trúc, được tối ưu hóa dung lượng để sẵn sàng phục vụ trên môi trường web.
+3.1.2. Pha thực thi phía máy khách
+Khi người dùng truy cập ứng dụng web, toàn bộ giao diện tĩnh và khối logic điều khiển (app.js) sẽ được tải về trình duyệt thông qua mạng lưới phân phối nội dung. Ngay trong quá trình khởi tạo ứng dụng, một luồng tải dữ liệu bất đồng bộ sẽ được kích hoạt để đưa tệp data.json trực tiếp vào bộ nhớ RAM của thiết bị.
+Từ thời điểm này, ứng dụng chuyển sang trạng thái tự trị hoàn toàn. Mọi thao tác tìm kiếm, lọc dữ liệu theo bộ môn, và kết xuất công thức toán học phức tạp (thông qua thư viện KaTeX) đều được thực hiện nội bộ bằng tài nguyên của máy cá nhân. Cách tiếp cận "đưa toàn bộ cơ sở dữ liệu đến gần người dùng nhất" này giúp thời gian phản hồi cho mọi truy vấn chỉ tính bằng mili-giây. Dựa trên độ phức tạp thuật toán, việc tra cứu trên mảng JSON được nạp sẵn trong RAM đạt thời gian $O(N)$ cho thao tác lọc và $O(1)$ cho truy xuất vị trí chính xác, tạo ra trải nghiệm mượt mà không thua kém các phần mềm cài đặt trực tiếp trên máy tính.
+3.2. Mô hình hóa dữ liệu tri thức
+Với đặc thù của một hệ thống tra cứu nhanh, cấu trúc dữ liệu cần thỏa mãn hai yếu tố: khả năng truy xuất với độ phức tạp thuật toán thấp và tính phân cấp rõ ràng để phục vụ bộ lọc đa chiều. Do không sử dụng cơ sở dữ liệu quan hệ với các bảng và khóa ngoại, toàn bộ mô hình thực thể - liên kết được ánh xạ trực tiếp sang cấu trúc JSON phân cấp dạng cây.
+Lược đồ dữ liệu được tổ chức thành hai khối cấu trúc chính: mảng subjects (định nghĩa không gian danh mục) và mảng topics (chứa nội dung kiến thức cốt lõi).
+3.2.1. Cấu trúc định tuyến và phân loại học
+Mảng subjects đóng vai trò như một hệ thống phân loại, lưu trữ thông tin về các bộ môn toán học và cấu trúc chương mục của chúng. Ví dụ:
+JSON
+"subjects": [
+  {
+    "id": "gt1",
+    "name": "Giải tích 1",
+    "chapters": [
+      {"id": "ch1", "name": "Chương 1: Số thực và Hàm số"},
+      {"id": "ch2", "name": "Chương 2: Đạo hàm và Vi phân"}
+    ]
+  },
+  {
+    "id": "dstt",
+    "name": "Đại số tuyến tính",
+    "chapters": [
+      {"id": "ch6", "name": "Chương 6: Không gian Vector"}
+    ]
+  }
+]
+Cách thiết kế này cho phép giao diện tự động tạo ra các menu điều hướng thay vì bị mã hóa cứng vào mã nguồn HTML. Điều này đảm bảo tính mở rộng cao; khi có nhu cầu bổ sung môn học mới, người quản trị chỉ cần cập nhật dữ liệu JSON mà không cần phải can thiệp hay viết lại mã nguồn giao diện.
+3.2.2. Khối thực thể tri thức
+Mỗi phần tử trong mảng topics đại diện cho một mẩu kiến thức độc lập. Để phục vụ thuật toán tìm kiếm mờ và bộ lọc phức hợp, cấu trúc này được thiết kế theo dạng chuẩn hóa dư thừa, chấp nhận tốn thêm một ít không gian lưu trữ để đổi lấy tốc độ truy xuất tối đa:
+JSON
+{
+  "id": "auto-101",
+  "subject_id": "gt1",
+  "chapter_id": "ch1",
+  "category_id": "property",
+  "title": "Định lý giá trị trung gian (Bolzano-Cauchy)",
+  "content": "<p>Nội dung định lý đã được biên dịch thành HTML kết hợp KaTeX $$ f(x) = 0 $$...</p>",
+  "tags": ["định lý giá trị trung gian", "hàm liên tục", "nghiệm"],
+  "related_ids": ["auto-102", "auto-105"]
+}
+Trong đó:
+Các trường subject_id, chapter_id, category_id đóng vai trò là các khóa ngoại ảo. Trình duyệt sử dụng các khóa này làm điểm neo để thực hiện các phép lọc, từ đó tìm ra chính xác bài viết yêu cầu.
+Trường content lưu trữ toàn bộ mã HTML và công thức KaTeX đã qua bước tinh chế từ trước. Việc xử lý sẵn nội dung này giúp giảm tải đáng kể khối lượng tính toán cho trình duyệt khi hiển thị bài viết.
+Mảng related_ids cung cấp danh sách các bài viết liên kết, giúp hệ thống có thể tự động gợi ý sinh viên đọc tiếp các định lý hay bài tập liên quan, mô phỏng lại cách não bộ liên kết thông tin.
+3.3. Triển khai quy trình xử lý dữ liệu tự động
+Quy trình bóc tách và chuyển đổi dữ liệu tự động là nền tảng cốt lõi của hệ thống xử lý hậu trường. Mã nguồn gốc của giáo trình toán thường được soạn thảo bằng LaTeX, một ngôn ngữ đánh dấu cực kỳ mạnh mẽ trong việc tạo hình toán học nhưng lại rất phi cấu trúc khi xét dưới góc độ dữ liệu máy tính. Việc trích xuất tri thức từ khối văn bản thô này yêu cầu các thuật toán phân tích cú pháp chuyên biệt.
+3.3.1. Thuật toán phân tích cú pháp LaTeX lồng nhau
+Một trong những bài toán khó khi xử lý mã nguồn LaTeX là tính chất lồng nhau của các cặp lệnh. Ví dụ, một đoạn mã in đậm có thể chứa bên trong một đoạn mã in nghiêng, và bên trong đoạn in nghiêng lại chứa các phân số toán học.
+Việc sử dụng các biểu thức chính quy thuần túy không thể giải quyết triệt để bài toán này vì chúng không có khả năng ghi nhớ và quản lý số lượng dấu ngoặc đóng mở. Do đó, hệ thống sử dụng một hàm đệ quy kết hợp với cấu trúc dữ liệu ngăn xếp để kiểm soát chính xác ranh giới của các câu lệnh.
+Quy trình hoạt động của thuật toán:
+Khởi tạo một con trỏ quét toàn bộ chuỗi ký tự để tìm các hàm lệnh (ví dụ: \textbf{).
+Khi gặp dấu ngoặc mở đầu tiên, hệ thống tạo một biến đếm và gán giá trị bằng 1 (đại diện cho thao tác đưa vào ngăn xếp).
+Vòng lặp tiếp tục duyệt qua từng ký tự:
+Nếu gặp dấu ngoặc nhọn mở {, biến đếm tăng thêm 1.
+Nếu gặp dấu ngoặc nhọn đóng }, biến đếm giảm đi 1.
+Thuật toán chủ động bỏ qua các ký tự ngoặc nhọn đóng vai trò là văn bản thông thường (như \{ hoặc \}) để tránh đếm sai.
+Khi biến đếm trở về 0, thuật toán xác định được chính xác ranh giới của toàn bộ khối nội dung lồng bên trong và tiến hành rút trích khối này.
+Nội dung trích xuất lại tiếp tục được truyền ngược vào chính hàm đệ quy trên để xử lý các lớp lồng sâu hơn bên trong.
+Cuối cùng, các cặp lệnh định dạng của LaTeX được thay thế an toàn bằng các thẻ HTML tương ứng.
+3.3.2. Tự động biên dịch đồ họa TikZ sang chuẩn vector
+Thư viện KaTeX trên trình duyệt hiển thị các biểu thức đại số rất tốt, nhưng lại không hỗ trợ các đoạn mã vẽ đồ họa hình học như gói lệnh TikZ. Để đưa các biểu đồ này lên nền tảng web mà vẫn giữ nguyên độ sắc nét, quy trình xử lý dữ liệu đã triển khai một cơ chế biên dịch độc lập chạy ngầm trên máy tính.
+Luồng hoạt động của cơ chế biên dịch đồ họa:
+Trong pha quét dữ liệu, khối mã nguồn vẽ hình TikZ được tách riêng. Để tránh việc phải dịch đi dịch lại hàng trăm hình ảnh gây treo máy, hệ thống dùng thuật toán băm tạo ra một mã định danh duy nhất cho mỗi đoạn mã TikZ. Thuật toán chỉ tiến hành biên dịch nếu hình ảnh mang mã định danh đó chưa tồn tại trong thư mục.
+Hệ thống tự động sinh ra một file LaTeX tạm thời, được cấu hình sao cho khung hình ảnh xuất ra chỉ ôm sát mép viền đồ thị chứ không sinh ra khoảng trắng dư thừa của cả một trang A4.
+Thông qua các hàm xử lý tiến trình của Node.js, hệ thống gọi trực tiếp trình biên dịch LaTeX (pdflatex) để tạo ra file PDF. Lệnh biên dịch được thiết lập ở chế độ bỏ qua cảnh báo hoặc thoát ngay nếu có lỗi, tránh tình trạng treo hệ thống chờ phản hồi.
+Sau đó, công cụ pdftocairo sẽ biến đổi tệp PDF vừa tạo thành định dạng ảnh vector SVG. Ưu điểm của dữ liệu SVG là hiển thị cực kỳ sắc nét, không bị vỡ hạt ở bất kỳ mức độ phóng to nào trên các màn hình hiện đại.
+Để các đồ thị nền trắng không làm chói mắt người dùng khi họ bật Chế độ Tối, hệ thống dùng CSS can thiệp nhẹ để đảo ngược dải màu sắc và điều chỉnh lại độ sáng. Nhờ thế, nền trắng sẽ chuyển thành xám đen nhưng các màu nhấn của đồ thị (như đường kẻ đỏ, xanh) vẫn được giữ nguyên bản.
+3.4. Triển khai logic tìm kiếm và tối ưu hóa kết quả
+Yếu tố cốt lõi tạo nên trải nghiệm tốt trong một hệ thống tra cứu là tốc độ và sự thông minh của thanh tìm kiếm. Khác với các cơ chế đối sánh từ khóa truyền thống thường thất bại nếu người dùng gõ sai ký tự hoặc thiếu dấu tiếng Việt, hệ thống này áp dụng công cụ tìm kiếm mờ chạy trực tiếp trên máy người dùng thông qua thư viện Fuse.js.
+3.4.1. Toán học đằng sau thuật toán tìm kiếm mờ và cấu hình trọng số
+Fuse.js cốt lõi hoạt động dựa trên thuật toán Bitap. Thuật toán này sử dụng các phép toán mức bit để đối sánh chuỗi xấp xỉ song song, từ đó tính toán ra Khoảng cách Levenshtein với tốc độ chớp nhoáng. Khoảng cách này đo lường số lượng thao tác tối thiểu (chèn, xóa hoặc thay thế ký tự) cần thiết để biến từ khóa người dùng gõ thành từ khóa có trong dữ liệu.
+Để điều hướng bộ máy tìm kiếm ưu tiên trả về các kết quả có giá trị học thuật cao nhất, hệ thống phân bổ mức độ ưu tiên cho các trường nội dung như sau:
+JavaScript
+const fuseOptions = {
+    keys: [
+        { name: 'title', weight: 0.5 },
+        { name: 'tags', weight: 0.3 },
+        { name: 'content', weight: 0.2 }
+    ],
+    threshold: 0.4,
+    ignoreLocation: true
+};
+Chiến lược phân bổ trọng số:
+Tiêu đề (Tầm quan trọng 50%): Tiêu đề thường phản ánh đúng bản chất của kiến thức (ví dụ: "Định lý Rolle"). Việc gán trọng số cao nhất đảm bảo rằng nếu từ khóa khớp với tiêu đề, điểm mức độ liên quan của bài viết đó sẽ được đẩy lên cao, giúp nó xuất hiện ở nhóm kết quả đầu tiên.
+Nhãn từ khóa (Tầm quan trọng 30%): Hoạt động như các cụm từ khóa mở rộng. Nhãn được hệ thống tự động sinh ra chứa các từ đồng nghĩa, giúp gom nhóm các kiến thức có liên quan chặt chẽ với nhau.
+Nội dung chi tiết (Tầm quan trọng 20%): Đóng vai trò là màng lọc dự phòng. Tính năng này phát huy tác dụng khi sinh viên tìm kiếm một cụm từ cụ thể hoặc một công thức nằm ẩn sâu bên trong định nghĩa mà không nằm trên tiêu đề.
+Ngưỡng dung sai (Mức 0.4): Đây là con số được tinh chỉnh sau nhiều lần thử nghiệm. Nó đủ linh hoạt để hiểu được các lỗi đánh máy hoặc gõ tiếng Việt không dấu (như gõ "dao ham" vẫn tìm ra "Đạo hàm"), nhưng cũng đủ khắt khe để loại bỏ những kết quả bị nhiễu quá xa so với từ khóa gốc.
+3.4.2. Kỹ thuật phân mảnh kết xuất và quản lý luồng hiển thị
+Khi sinh viên nhập một từ khóa phổ biến (ví dụ: "ma trận"), hệ thống có thể tìm thấy hàng trăm bài viết phù hợp. Về mặt kỹ thuật, nếu chúng ta ép trình duyệt phải chèn hàng ngàn khối mã HTML phức tạp chứa công thức toán học vào giao diện cùng một lúc, máy tính sẽ bị quá tải. Việc này khiến trình duyệt bị tụt khung hình, màn hình đơ cứng và không tiếp nhận các thao tác cuộn chuột từ người dùng.
+Để giải quyết vấn đề nút thắt cổ chai hiển thị này, hệ thống áp dụng kỹ thuật phân mảnh kết xuất. Triết lý ở đây là "Chỉ xử lý hiển thị những gì người dùng đang cần xem ngay lúc đó".
+Ứng dụng được thiết kế một bộ đệm kiểm soát, chỉ bơm vào giao diện một tập hợp gồm 10 bài viết tại một thời điểm:
+JavaScript
+const pageSize = 10;
+// Cắt lấy đúng 10 phần tử tiếp theo từ tập kết quả
+const topicsToRender = state.currentResults.slice(state.renderedCount, state.renderedCount + pageSize);
+
+// Quá trình render DOM và gọi KaTeX parser chỉ thực hiện trên 10 phần tử này
+state.renderedCount += topicsToRender.length;
+Cơ chế tối ưu hóa hiển thị an toàn:
+Hệ thống trích xuất một nhóm tối đa 10 bài viết từ kết quả bộ nhớ.
+Tiến hành nối chuỗi nội dung HTML của các bài viết này vào một vùng nhớ đệm ẩn danh. Thao tác trên vùng nhớ ảo này không kích hoạt quá trình vẽ lại giao diện của trình duyệt.
+Công cụ KaTeX quét qua vùng nhớ đệm, tìm các phân đoạn mã hóa toán học và biên dịch chúng thành các khối giao diện đẹp mắt. Tốc độ biên dịch lúc này đạt mức tối đa do không bị chi phối bởi quy trình vẽ ra màn hình.
+Chỉ khi đã chuẩn bị xong xuôi, toàn bộ khối nội dung đó mới được đưa ra hiển thị chính thức trên khu vực kết quả. Thao tác này diễn ra chớp nhoáng và không làm gián đoạn trải nghiệm người dùng.
+Hệ thống kiểm tra nếu vẫn còn bài viết chưa hiển thị, một nút "Tải thêm" sẽ được đính kèm vào cuối danh sách. Khi người dùng cuộn tới mép dưới màn hình, hệ thống mới lặp lại quy trình trên để giải phóng nhóm 10 bài tiếp theo.
+Cách làm chia nhỏ công việc này đảm bảo ứng dụng luôn giữ được độ mượt mà, thời gian phản hồi các thao tác click chuột luôn duy trì ở mức lý tưởng, đáp ứng tiêu chuẩn hiệu năng khắt khe của các trình duyệt hiện đại.
+3.5. Thiết kế giao diện và trải nghiệm người dùng
+Yếu tố tiên quyết để đảm bảo tính khả dụng của một hệ thống giáo dục là giao diện. Nó phải trực quan, thân thiện và hạn chế tối đa việc gây mỏi mắt cho sinh viên trong những phiên học tập kéo dài. Giao diện của phần mềm được xây dựng dựa trên nền tảng Bootstrap 5, ứng dụng phong cách thiết kế kính mờ hiện đại để tạo chiều không gian có chiều sâu và thoáng đãng.
+3.5.1. Hệ thống lọc tri thức đa tầng
+Thanh điều hướng bên trái đóng vai trò là một bảng điều khiển bộ lọc nhiều lớp. Về mặt bản chất toán học, lõi logic xử lý phía dưới chính là sự thực thi của nguyên lý giao các tập hợp.
+Mỗi khi người dùng nhấp chuột thay đổi điều kiện (ví dụ: nhấp chọn môn Đại số, chọn Chương 6), ứng dụng tức thời thu thập các trạng thái điều kiện đang có. Dữ liệu sẽ chạy qua một chuỗi các lớp lọc liên tiếp:
+Lọc theo nội dung: Nếu người dùng có gõ từ khóa tìm kiếm, hệ thống sẽ ánh xạ kho dữ liệu qua công cụ Fuse.js để tạo ra tập kết quả sát nghĩa nhất.
+Lọc theo môn học: Tập dữ liệu tiếp tục được thu hẹp lại, chỉ giữ các bài thuộc môn học được chọn.
+Lọc theo không gian cục bộ: Thu hẹp tiếp dữ liệu chỉ lấy các bài nằm trong phạm vi chương mong muốn.
+Lọc theo phân loại: Cuối cùng, lọc theo nhãn đặc tính (như chỉ tìm định lý, hoặc chỉ tìm bài tập).
+Cách kiến trúc thuật toán này giúp hệ thống cô lập chính xác những kiến thức cần tìm theo nhiều trục khác nhau. Một yêu cầu phức tạp như "Tìm mọi Định lý liên quan đến chữ ma trận trong Chương 6 của môn Đại số tuyến tính" được hệ thống giải quyết trơn tru và trả kết quả lên màn hình chỉ trong vài tích tắc.
+3.5.2. Chế độ Tối và khả năng thích ứng giao diện
+Nhận thức được thói quen làm việc muộn vào ban đêm của sinh viên khối ngành kỹ thuật, Chế độ Sáng/Tối được xem là một tính năng thiết yếu giúp bảo vệ mắt chứ không đơn thuần là để trang trí.
+Thay vì thiết kế theo kiểu cũ (duy trì hai bộ tệp giao diện khổng lồ riêng biệt và hoán đổi chúng gây chớp đen màn hình), hệ thống tận dụng sức mạnh của các biến màu sắc trong CSS. Mọi thông số như màu nền, độ bóng, độ đục đều được chuyển thành các biến số:
+CSS
+/* Trạng thái mặc định (Chế độ Tối) */
+[data-bs-theme="dark"] {
+    --bg-dark: #0f172a;               /* Màu nền không gian tối */
+    --bg-panel: rgba(30, 41, 59, 0.7);/* Độ trong suốt của các hộp nội dung */
+    --text-main: #f8fafc;             /* Màu chữ tương phản dễ đọc */
+}
+
+/* Ghi đè trạng thái khi ở Chế độ Sáng */
+[data-bs-theme="light"] {
+    --bg-dark: #f8fafc;
+    --bg-panel: rgba(255, 255, 255, 0.7);
+    --text-main: #0f172a;
+}
+Khi người dùng bấm nút đổi màu trên thanh điều hướng, JavaScript không cần phải chạy vòng lặp để thay đổi thuộc tính của hàng ngàn phần tử đang hiển thị. Thay vào đó, nó chỉ thiết lập lại một biến trạng thái duy nhất ở cấp độ cao nhất của trang web.
+Ngay lập tức, trình duyệt tự động cập nhật lại toàn bộ màu sắc của các thành phần con một cách mượt mà nhờ các hiệu ứng chuyển đổi mờ dần. Cấu hình màu sắc này đồng thời được lưu vào bộ nhớ cục bộ của trình duyệt để duy trì sở thích của người dùng cho những lần truy cập sau.
+Khả năng tự động co giãn đa nền tảng:
+Dựa trên hệ thống phân chia lưới của Bootstrap, giao diện phân chia không gian hiển thị một cách hợp lý để hỗ trợ nhiều loại thiết bị:
+Trên màn hình máy tính rộng rãi, thanh bộ lọc được cấp 25% diện tích cố định ở lề trái. Cấu trúc này đảm bảo sinh viên liên tục có quyền sử dụng các nút điều kiện mà không phải mất công cuộn trang ngược lên trên cùng.
+Tuy nhiên, khi người dùng mở web bằng điện thoại di động hoặc máy tính bảng (kích thước màn hình hạ xuống dưới 992px), hệ thống sẽ chủ động tự vệ bằng cách giấu thanh bộ lọc này đi. Toàn bộ 100% diện tích màn hình eo hẹp sẽ được nhường lại để hiển thị các phương trình vi phân phức tạp, tránh tình trạng công thức bị ép ngắt dòng gây khó đọc. Các công cụ lọc lúc này được thu gọn vào một thanh trượt phụ ngoài rìa màn hình, chỉ hiện ra khi người dùng bấm nút. Việc ưu tiên trải nghiệm trên thiết bị di động này mang lại cảm giác sử dụng tự nhiên, giúp người học duy trì sự tập trung cao nhất vào bài học.
+3.5.3. Tích hợp các công cụ hỗ trợ học tập
+Để tạo ra một môi trường học tập toàn diện, hệ thống không chỉ dừng lại ở chức năng tra cứu lý thuyết đơn thuần mà còn được tích hợp thêm các công cụ hỗ trợ thực hành và giải đáp thắc mắc:
+Trợ lý ảo giải đáp toán học: Trên giao diện có bố trí một nút bấm luôn nổi ở góc dưới màn hình, kết nối trực tiếp với một trợ lý ảo thông minh được tùy biến riêng trên nền tảng Poe. Thiết kế này rất tiện lợi, giúp sinh viên khi đang đọc mà gặp một định lý khó hiểu có thể lập tức nhắn tin đặt câu hỏi hoặc yêu cầu giải thích chi tiết hơn ngay tại chỗ mà không cần phải chuyển sang trang web khác.
+Bộ công cụ toán học chuyên nghiệp: Mặc dù mục tiêu chính của hệ thống là tra cứu nhanh, nhưng thực tế sinh viên luôn có nhu cầu giải quyết các bài toán tính toán phức tạp (như tính đạo hàm nhiều biến hay nhân các ma trận cấp cao). Thay vì cất công viết lại các bộ máy giải toán khổng lồ làm nặng hệ thống, dự án đóng vai trò như một trạm trung chuyển. Ngay từ thanh điều hướng, sinh viên có thể mở khu vực công cụ chuyên nghiệp để truy cập thẳng vào các nền tảng giải toán hàng đầu thế giới như Wolfram Alpha hay Matrix Calculator. Cách làm "đứng trên vai người khổng lồ" này vừa giúp sinh viên có công cụ thực hành chính xác tuyệt đối, lại vừa giữ cho mã nguồn của ứng dụng gốc luôn nhẹ nhàng.
+Thư viện tài liệu học tập: Bên cạnh những mảng kiến thức đã được bóc tách nhỏ để tra cứu, hệ thống còn cung cấp một khu vực riêng để quản lý các tài liệu tham khảo nguyên bản như giáo trình hay bài giảng định dạng PDF. Điểm cộng là sinh viên có thể xem trực tiếp nội dung các tài liệu này ngay trên trình duyệt, hoặc bấm tải về máy để xem khi không có mạng lưới internet, giúp việc tổng hợp tài liệu ôn thi trở nên linh hoạt và chủ động hơn rất nhiều.
+
+3.6. Phát triển công cụ Tìm lộ trình học tập thông minh (Learning Path Finder)
+Tính năng này được thiết kế nhằm giúp sinh viên giải đáp câu hỏi: "Để hiểu được khái niệm B, tôi cần phải đi qua những bài học nào từ khái niệm A?".
+3.6.1. Xây dựng danh sách kề từ cấu trúc dữ liệu JSON
+Ngay khi ứng dụng được khởi tạo và tệp data.json được nạp vào bộ nhớ, hệ thống sẽ tiến hành xây dựng một danh sách kề (adjacency list) trong RAM. Dữ liệu này được bóc tách từ trường related_ids của từng thực thể tri thức. Đây là cấu trúc dữ liệu tối ưu cho việc duyệt đồ thị, cho phép thuật toán truy cập các nút lân cận với độ phức tạp O(1).
+3.6.2. Cơ chế vận hành thuật toán tìm kiếm lộ trình
+Khi người dùng thực hiện yêu cầu tìm lộ trình, hệ thống vận hành thuật toán BFS trên danh sách kề đã xây dựng. Mặc dù trên giao diện người dùng, các thuật ngữ kỹ thuật đã được lược bỏ để giữ sự tinh gọn và thân thiện, nhưng bản chất logic vẫn đảm bảo tính khoa học và chính xác cao nhất. Thuật toán sẽ duyệt qua mạng lưới liên kết và trả về một dãy các bài học theo đúng trình tự logic cần thiết để đi từ điểm xuất phát đến đích đến.
+3.6.3. Trực quan hóa lộ trình bằng giao diện Timeline
+Để kết quả tìm kiếm không chỉ là một danh sách văn bản khô khan, hệ thống sử dụng giao diện "Timeline" (dòng thời gian) để hiển thị lộ trình. Mỗi bước trong lộ trình được trình bày rõ ràng với các chỉ dẫn: "Bắt đầu", "Bước tiếp theo" và "Đích đến". Người dùng có thể nhấp trực tiếp vào từng thẻ bài học trên Timeline để mở nội dung chi tiết. Sự kết hợp giữa logic toán học của thuật toán tìm kiếm và sự trực quan của giao diện đã biến một bài toán đồ thị phức tạp thành một công cụ học tập dễ tiếp cận và đầy cảm hứng.
+
+TÀI LIỆU THAM KHẢO BIBLIOGRAPHY 
+[1] 
+K. H. Rosen, Discrete mathematics and its applications, New York: McGraw-Hill, 2012. 
+[2] 
+E. Lehman, F. T. Leighton and A. R. Meyer, Mathematics for Computer Science, Cambridge: MIT OpenCourseWare, 2010. 
+[3] 
+Y. A. Liu and M. Castellana, "Discrete Math with Programming: A Principled Approach," arXiv, Ithaca, 2020.
+[4] 
+N. Alon, "Discrete Mathematics: Methods and Challenges," arXiv, 2002.
+[5] 
+Khan Academy, "KaTeX Documentation," KaTeX, Mountain View, 2023.
+AI VIET NAM. (n.d.). Kiến thức cơ bản về AI và xử lý ngôn ngữ tự nhiên. Truy xuất từ https://share.google/HpVpKIPJQ8u1IbP3K
+Fuse.js. (n.d.). Fuse.js: Powerful, lightweight fuzzy-search library. Truy xuất từ https://share.google/ObIYdRKDgna9EmCoC
+GitHub. (n.d.). Tài liệu mã nguồn và thư viện xử lý tìm kiếm. Truy xuất từ https://share.google/DĐqwGOTMYNmHY68vx
+Tạp chí Khoa học và Công nghệ - Đại học Đà Nẵng (jst-ud.vn). (n.d.). Nghiên cứu ứng dụng công nghệ tìm kiếm tri thức. Truy xuất từ https://share.google/5yIBbkjIDhCMB9PNc
+Studocu Vietnam. (n.d.). Tài liệu tổng hợp thuật toán tìm kiếm và xử lý văn bản. Truy xuất từ https://share.google/3XAO5brwPgHgz39th
+Viblo. (n.d.). Tổng quan về Fuzzy Search và ứng dụng thực tiễn. Truy xuất từ https://share.google/GJY8C2ojộmUsrZpkj
+Viện Quản trị và Công nghệ FMIT. (n.d.). Hệ thống quản trị tri thức và ứng dụng. Truy xuất từ https://share.google/m3sPaVyakpgCgh2jV
+Wikipedia. (n.d.). Knowledge retrieval. Truy xuất từ https://share.google/HelBx6xTYa8oxẼgRr
+
+
+
+

@@ -101,15 +101,7 @@ async function init() {
             document.getElementById('loadingState')?.remove();
             
             // Render Math trong thông báo lỗi
-            renderMathInElement(elements.contentArea, {
-                delimiters: [
-                    {left: '$$', right: '$$', display: true},
-                    {left: '$', right: '$', display: false},
-                    {left: '\\(', right: '\\)', display: false},
-                    {left: '\\[', right: '\\]', display: true}
-                ],
-                throwOnError: false
-            });
+            safeRenderMath(elements.contentArea);
             
         } else {
             elements.contentArea.innerHTML = `
@@ -197,6 +189,32 @@ function renderFilters() {
     // Clone for mobile offcanvas
     renderSubjectButtons(state.data.subjects, elements.mobileSubjectFilters, true);
     renderCategoryButtons(state.data.categories, elements.mobileCategoryFilters, 'currentCategory', true);
+
+    // Apply KaTeX to filters (sidebar)
+    safeRenderMath(elements.subjectFilters);
+    safeRenderMath(elements.categoryFilters);
+    safeRenderMath(elements.mobileSubjectFilters);
+    safeRenderMath(elements.mobileCategoryFilters);
+}
+
+/**
+ * Helper to safely render Math with KaTeX
+ * Prevents double-rendering by ignoring already rendered elements
+ */
+function safeRenderMath(element) {
+    if (!element || !window.renderMathInElement) return;
+    
+    renderMathInElement(element, {
+        delimiters: [
+            {left: '$$', right: '$$', display: true},
+            {left: '$', right: '$', display: false},
+            {left: '\\(', right: '\\)', display: false},
+            {left: '\\[', right: '\\]', display: true}
+        ],
+        ignoredTags: ["script", "noscript", "style", "textarea", "pre", "code", "option"],
+        ignoredClasses: ["katex"], // Critical: prevents re-rendering already rendered math
+        throwOnError: false
+    });
 }
 
 // Render Topics to Screen in Chunks
@@ -327,15 +345,7 @@ function renderTopicsChunk(isNew = false) {
     const tempDiv = document.createElement('div');
     tempDiv.innerHTML = html;
 
-    renderMathInElement(tempDiv, {
-        delimiters: [
-            {left: '$$', right: '$$', display: true},
-            {left: '$', right: '$', display: false},
-            {left: '\\(', right: '\\)', display: false},
-            {left: '\\[', right: '\\]', display: true}
-        ],
-        throwOnError: false
-    });
+    safeRenderMath(tempDiv);
 
     while (tempDiv.firstChild) {
         elements.contentArea.appendChild(tempDiv.firstChild);
@@ -384,6 +394,7 @@ function applyFiltersAndSearch() {
         elements.searchStatusArea.classList.remove('d-none');
         elements.searchStatusText.innerHTML = `Kết quả cho "<span class="text-primary fw-bold">${state.searchQuery}</span>"`;
         elements.searchResultCount.textContent = `${results.length} kết quả`;
+        safeRenderMath(elements.searchStatusArea);
     } else {
         elements.searchStatusArea.classList.add('d-none');
     }
@@ -419,6 +430,12 @@ function updateBreadcrumb() {
         return;
     }
 
+    if (state.activeTool === 'learning-path') {
+        elements.subjectBreadcrumb.innerHTML = `<span class="fw-medium"><i class="bi bi-diagram-3 me-1 small"></i>Lộ trình học tập</span>`;
+        elements.subjectBreadcrumb.classList.remove('d-none');
+        return;
+    }
+
     if (state.activeTool) {
         elements.subjectBreadcrumb.innerHTML = `<span class="fw-medium"><i class="bi bi-cpu me-1 small"></i>Công cụ Chuyên nghiệp</span>`;
         elements.subjectBreadcrumb.classList.remove('d-none');
@@ -442,6 +459,7 @@ function updateBreadcrumb() {
         }
         elements.subjectBreadcrumb.innerHTML = html;
         elements.subjectBreadcrumb.classList.remove('d-none');
+        safeRenderMath(elements.subjectBreadcrumb);
     } else {
         elements.subjectBreadcrumb.classList.add('d-none');
     }
@@ -466,12 +484,17 @@ window.clearFilters = function() {
 function renderMathTools(toolId) {
     // IDEMPOTENCY: Don't re-render if we are already viewing this tool.
     const existingTool = elements.contentArea.querySelector('.tool-container');
-    if (existingTool && existingTool.getAttribute('data-tool-id') === 'external-tools') return;
+    if (existingTool && existingTool.getAttribute('data-tool-id') === toolId) return;
+
+    if (toolId === 'learning-path') {
+        renderLearningPathUI();
+        return;
+    }
 
     elements.contentArea.innerHTML = '';
     const container = document.createElement('div');
     container.className = 'tool-container fade-in position-relative';
-    container.setAttribute('data-tool-id', 'external-tools');
+    container.setAttribute('data-tool-id', 'solver');
     
     container.innerHTML = `
         <div class="tool-badge">Professional Suite</div>
@@ -516,6 +539,198 @@ function renderMathTools(toolId) {
         </div>
     `;
     elements.contentArea.appendChild(container);
+}
+
+/**
+ * LEARNING PATH IMPLEMENTATION
+ */
+function renderLearningPathUI() {
+    elements.contentArea.innerHTML = '';
+    const container = document.createElement('div');
+    container.className = 'tool-container fade-in position-relative';
+    container.setAttribute('data-tool-id', 'learning-path');
+    
+    let dropdownItemsHtml = '<li><a class="dropdown-item cursor-pointer" data-value="">-- Chọn bài học --</a></li>';
+    state.data.topics.forEach(t => {
+        dropdownItemsHtml += `<li><a class="dropdown-item cursor-pointer" data-value="${t.id}">${t.title}</a></li>`;
+    });
+
+    container.innerHTML = `
+        <div class="tool-badge bg-success bg-opacity-25 text-success">AI Search Algorithm</div>
+        <div class="tool-header">
+            <h3 class="m-0"><i class="bi bi-diagram-3 me-2"></i>Tìm Lộ Trình Học Tập</h3>
+            <p class="text-muted mt-2">Ứng dụng Đồ thị Tri thức để tìm lộ trình học tập tối ưu giữa hai khái niệm Toán học.</p>
+        </div>
+        
+        <div class="topic-card p-4 mt-4">
+            <div class="row g-3">
+                <div class="col-md-5">
+                    <label class="form-label text-muted small fw-bold">Điểm Xuất Phát (Start Node)</label>
+                    <div class="dropdown d-grid">
+                        <button class="btn btn-dark text-start border-secondary dropdown-toggle text-truncate" type="button" data-bs-toggle="dropdown" id="btnBfsStartNode">
+                            -- Chọn bài học --
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-dark w-100 shadow" style="max-height: 300px; overflow-y: auto;">
+                            ${dropdownItemsHtml}
+                        </ul>
+                    </div>
+                    <input type="hidden" id="bfsStartNode" value="">
+                </div>
+                <div class="col-md-2 d-flex align-items-end justify-content-center">
+                    <i class="bi bi-arrow-right text-muted fs-3 mb-2 d-none d-md-block"></i>
+                    <i class="bi bi-arrow-down text-muted fs-3 mb-2 d-block d-md-none"></i>
+                </div>
+                <div class="col-md-5">
+                    <label class="form-label text-muted small fw-bold">Đích Đến (Target Node)</label>
+                    <div class="dropdown d-grid">
+                        <button class="btn btn-dark text-start border-secondary dropdown-toggle text-truncate" type="button" data-bs-toggle="dropdown" id="btnBfsTargetNode">
+                            -- Chọn bài học --
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-dark w-100 shadow" style="max-height: 300px; overflow-y: auto;">
+                            ${dropdownItemsHtml}
+                        </ul>
+                    </div>
+                    <input type="hidden" id="bfsTargetNode" value="">
+                </div>
+            </div>
+            <div class="text-center mt-4">
+                <button class="btn btn-primary rounded-pill px-5" id="btnRunBFS">
+                    <i class="bi bi-search me-2"></i>Tìm lộ trình ngắn nhất
+                </button>
+            </div>
+        </div>
+        
+        <div id="bfsResultArea" class="mt-5"></div>
+    `;
+    
+    elements.contentArea.appendChild(container);
+
+    // Apply KaTeX to the dropdowns
+    safeRenderMath(container);
+
+    // Handle dropdown selection
+    container.querySelectorAll('.dropdown-item').forEach(item => {
+        item.addEventListener('click', function(e) {
+            e.preventDefault();
+            const value = this.getAttribute('data-value');
+            // get inner html to preserve katex rendering in the button
+            const htmlContent = this.innerHTML;
+            const dropdownToggle = this.closest('.dropdown').querySelector('.dropdown-toggle');
+            const hiddenInput = this.closest('.col-md-5').querySelector('input[type="hidden"]');
+            
+            dropdownToggle.innerHTML = htmlContent;
+            hiddenInput.value = value;
+            // Ensure the toggle text is also rendered if it contains LaTeX
+            safeRenderMath(dropdownToggle);
+        });
+    });
+    
+    document.getElementById('btnRunBFS').addEventListener('click', () => {
+        const startId = document.getElementById('bfsStartNode').value;
+        const targetId = document.getElementById('bfsTargetNode').value;
+        if (!startId || !targetId) {
+            alert('Vui lòng chọn cả điểm xuất phát và đích đến!');
+            return;
+        }
+        runBFSAlgorithm(startId, targetId);
+    });
+}
+
+function runBFSAlgorithm(startId, targetId) {
+    const resultArea = document.getElementById('bfsResultArea');
+    resultArea.innerHTML = '<div class="text-center text-muted"><div class="spinner-border text-success mb-2" role="status"></div><br/>Đang tìm lộ trình học tập tối ưu...</div>';
+    
+    setTimeout(() => {
+        // Build graph adjacency list
+        const graph = {};
+        state.data.topics.forEach(t => {
+            graph[t.id] = t.related_ids || [];
+        });
+        
+        // BFS Implementation
+        const queue = [[startId]];
+        const visited = new Set([startId]);
+        let shortestPath = null;
+        
+        if (startId === targetId) {
+            shortestPath = [startId];
+        } else {
+            while (queue.length > 0) {
+                const path = queue.shift();
+                const node = path[path.length - 1];
+                
+                const neighbors = graph[node] || [];
+                for (let neighbor of neighbors) {
+                    if (neighbor === targetId) {
+                        shortestPath = [...path, neighbor];
+                        queue.length = 0; // break outer loop
+                        break;
+                    }
+                    if (!visited.has(neighbor)) {
+                        visited.add(neighbor);
+                        queue.push([...path, neighbor]);
+                    }
+                }
+            }
+        }
+        
+        if (!shortestPath) {
+            resultArea.innerHTML = `
+                <div class="alert alert-warning text-center">
+                    <i class="bi bi-exclamation-triangle fs-4 d-block mb-2"></i>
+                    Không tìm thấy đường đi kết nối giữa hai bài học này trong đồ thị tri thức.
+                </div>
+            `;
+            return;
+        }
+        
+        // Render path
+        let pathHtml = '<h5 class="fw-bold mb-4 text-center">Lộ trình học tập đề xuất</h5><div class="timeline-container">';
+        shortestPath.forEach((nodeId, index) => {
+            const topic = state.data.topics.find(t => t.id === nodeId);
+            const isFirst = index === 0;
+            const isLast = index === shortestPath.length - 1;
+            const badgeClass = isFirst ? 'bg-success' : (isLast ? 'bg-primary' : 'bg-secondary');
+            const badgeText = isFirst ? 'Bắt đầu' : (isLast ? 'Đích đến' : `Bước ${index}`);
+            
+            pathHtml += `
+                <div class="d-flex align-items-center mb-3 fade-in" style="animation-delay: ${index * 0.1}s">
+                    <div class="badge ${badgeClass} rounded-pill p-2 me-3" style="min-width: 80px;">${badgeText}</div>
+                    <div class="topic-card flex-grow-1 p-3 m-0 border-start border-4 border-success cursor-pointer" onclick="viewTopicFromBFS('${topic.id}')">
+                        <h6 class="mb-1 text-light"><i class="bi bi-journal-text me-2"></i>${topic.title}</h6>
+                        <span class="small text-muted">Nhấn để xem chi tiết bài học</span>
+                    </div>
+                </div>
+            `;
+            
+            if (!isLast) {
+                pathHtml += '<div class="text-center text-muted mb-3" style="width: 80px;"><i class="bi bi-arrow-down fs-4"></i></div>';
+            }
+        });
+        pathHtml += '</div>';
+        
+        resultArea.innerHTML = pathHtml;
+        safeRenderMath(resultArea);
+    }, 500); // add slight delay to show the AI loading effect
+}
+
+window.viewTopicFromBFS = function(topicId) {
+    const targetTopic = state.data.topics.find(t => t.id === topicId);
+    if(targetTopic) {
+        state.searchQuery = "";
+        elements.searchInput.value = "";
+        elements.clearSearchBtn.classList.add('d-none');
+        state.currentSubject = targetTopic.subject_id;
+        state.currentChapter = targetTopic.chapter_id || null;
+        state.currentCategory = targetTopic.category_id;
+        state.activeTool = null;
+        
+        state.currentResults = [targetTopic];
+        renderTopicsChunk(true);
+        renderFilters();
+        updateBreadcrumb();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
 }
 
 /**
