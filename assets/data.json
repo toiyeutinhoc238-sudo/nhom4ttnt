@@ -3276,20 +3276,6 @@
       ]
     },
     {
-      "id": "auto-258",
-      "subject_id": "other",
-      "chapter_id": "ch14",
-      "category_id": "concept",
-      "title": " (Chương 14)",
-      "content": "Sinh viên khoa Công nghệ thông tin thường đặt câu hỏi: <em>\"Tại sao chúng ta phải học đạo hàm, tích phân, ma trận hay không gian vector...? Trong khi lập trình chỉ cần logic và cấu trúc dữ liệu?\"</em>. Câu trả lời là: Lập trình giúp chúng ta tạo ra ứng dụng, nhưng toán học mới là chìa khóa để chúng ta tạo ra những hệ thống cốt lõi như trí tuệ nhân tạo (AI), đồ họa 3D, Search Engine hay thuật toán mã hóa... Chương này sẽ trình bày một số ứng dụng thực tế sinh động nhất của toán học trong khoa học máy tính.",
-      "tags": [
-        ""
-      ],
-      "related_ids": [
-        "auto-259"
-      ]
-    },
-    {
       "id": "auto-259",
       "subject_id": "other",
       "chapter_id": "ch14",
@@ -3301,7 +3287,6 @@
         "ví dụ minh họa"
       ],
       "related_ids": [
-        "auto-258",
         "auto-260"
       ]
     },
